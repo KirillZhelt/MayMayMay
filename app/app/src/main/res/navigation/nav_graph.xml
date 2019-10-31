@@ -15,4 +15,9 @@
         android:name="dev.kirillzhelt.maymaymay.NewDayFragment"
         android:label="fragment_new_day"
         tools:layout="@layout/fragment_new_day" />
+    <fragment
+        android:id="@+id/editDayFragment"
+        android:name="dev.kirillzhelt.maymaymay.EditDayFragment"
+        android:label="fragment_edit_day"
+        tools:layout="@layout/fragment_edit_day" />
 </navigation>
