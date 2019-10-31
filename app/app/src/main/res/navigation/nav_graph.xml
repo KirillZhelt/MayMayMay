@@ -20,4 +20,9 @@
         android:name="dev.kirillzhelt.maymaymay.EditDayFragment"
         android:label="fragment_edit_day"
         tools:layout="@layout/fragment_edit_day" />
+    <fragment
+        android:id="@+id/dayInfoFragment"
+        android:name="dev.kirillzhelt.maymaymay.DayInfoFragment"
+        android:label="fragment_day_info"
+        tools:layout="@layout/fragment_day_info" />
 </navigation>
