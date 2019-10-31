@@ -4,4 +4,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="days_list_fragment_name">DaysListFragment</string>
+    <string name="day_info_fragment_name">DayInfoFragment</string>
+    <string name="edit_day_fragment_name">EditDayFragment</string>
+    <string name="new_day_fragment_name">NewDayFragment</string>
 </resources>

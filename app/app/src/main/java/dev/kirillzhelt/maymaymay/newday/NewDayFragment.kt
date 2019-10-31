@@ -1,4 +1,4 @@
-package dev.kirillzhelt.maymaymay
+package dev.kirillzhelt.maymaymay.newday
 
 
 import android.os.Bundle
@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import dev.kirillzhelt.maymaymay.R
 
 /**
  * A simple [Fragment] subclass.
