@@ -10,4 +10,9 @@
         android:name="dev.kirillzhelt.maymaymay.dayslist.DaysListFragment"
         android:label="fragment_days_list"
         tools:layout="@layout/fragment_days_list" />
+    <fragment
+        android:id="@+id/newDayFragment"
+        android:name="dev.kirillzhelt.maymaymay.NewDayFragment"
+        android:label="fragment_new_day"
+        tools:layout="@layout/fragment_new_day" />
 </navigation>
