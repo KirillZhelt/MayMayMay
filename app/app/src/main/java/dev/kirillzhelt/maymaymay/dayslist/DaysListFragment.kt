@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import dev.kirillzhelt.maymaymay.MainApplication
 import dev.kirillzhelt.maymaymay.R
@@ -28,7 +29,13 @@ class DaysListFragment : Fragment() {
 
         val daysListRecyclerView: RecyclerView = view.findViewById(R.id.fragment_days_list_rv)
 
-        daysListRecyclerView.adapter = DaysListAdapter(daysListViewModel.getDays())
+        val daysListAdapter = DaysListAdapter()
+
+        daysListRecyclerView.adapter = daysListAdapter
+
+        daysListViewModel.days.observe(this, Observer { days ->
+            daysListAdapter.days = days
+        })
 
         return view
     }

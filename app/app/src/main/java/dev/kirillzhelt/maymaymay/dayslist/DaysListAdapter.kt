@@ -10,7 +10,13 @@ import dev.kirillzhelt.maymaymay.daysmodel.Day
 import java.text.SimpleDateFormat
 import java.util.*
 
-class DaysListAdapter(private val days: List<Day>): RecyclerView.Adapter<DaysListAdapter.DaysListViewHolder>() {
+class DaysListAdapter: RecyclerView.Adapter<DaysListAdapter.DaysListViewHolder>() {
+
+    var days: List<Day> = listOf()
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DaysListViewHolder {
         return DaysListViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.rv_item_day, parent, false))
