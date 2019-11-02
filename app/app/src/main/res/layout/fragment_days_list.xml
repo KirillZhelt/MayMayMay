@@ -6,4 +6,10 @@
     android:layout_height="match_parent"
     tools:context=".dayslist.DaysListFragment">
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/fragment_days_list_rcl_vw"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
