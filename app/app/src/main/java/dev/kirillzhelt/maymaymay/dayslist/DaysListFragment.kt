@@ -27,7 +27,7 @@ class DaysListFragment : Fragment() {
 
         daysListViewModel = DaysListViewModel(MainApplication.daysRepository)
 
-       
+
 
         return view
     }
