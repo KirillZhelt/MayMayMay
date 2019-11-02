@@ -27,18 +27,7 @@ class DaysListFragment : Fragment() {
 
         daysListViewModel = DaysListViewModel(MainApplication.daysRepository)
 
-        val dayInfoButton: Button = view.findViewById(R.id.fragment_days_list_day_info_btn)
-        val newDayButton: Button = view.findViewById(R.id.fragment_days_list_new_day_btn)
-
-        dayInfoButton.setOnClickListener {
-            val action = DaysListFragmentDirections.actionDaysListFragmentToDayInfoFragment()
-            view.findNavController().navigate(action)
-        }
-
-        newDayButton.setOnClickListener {
-            val action = DaysListFragmentDirections.actionDaysListFragmentToNewDayFragment()
-            view.findNavController().navigate(action)
-        }
+       
 
         return view
     }
