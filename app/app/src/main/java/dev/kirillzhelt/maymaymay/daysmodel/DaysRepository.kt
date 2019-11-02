@@ -1,6 +1,5 @@
 package dev.kirillzhelt.maymaymay.daysmodel
 
-import android.util.Log
 import java.text.SimpleDateFormat
 import java.util.*
 

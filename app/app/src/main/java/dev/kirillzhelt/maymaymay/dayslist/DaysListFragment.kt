@@ -6,8 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import androidx.navigation.findNavController
+import androidx.recyclerview.widget.RecyclerView
 import dev.kirillzhelt.maymaymay.MainApplication
 import dev.kirillzhelt.maymaymay.R
 
@@ -27,7 +26,9 @@ class DaysListFragment : Fragment() {
 
         daysListViewModel = DaysListViewModel(MainApplication.daysRepository)
 
+        val daysListRecyclerView: RecyclerView = view.findViewById(R.id.fragment_days_list_rv)
 
+        daysListRecyclerView.adapter = DaysListAdapter(daysListViewModel.getDays())
 
         return view
     }
