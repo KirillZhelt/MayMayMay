@@ -1,8 +1,9 @@
 package dev.kirillzhelt.maymaymay.dayslist
 
 import androidx.lifecycle.ViewModel
+import dev.kirillzhelt.maymaymay.daysmodel.DaysRepository
 
-class DaysListViewModel(): ViewModel() {
+class DaysListViewModel(private val daysRepository: DaysRepository): ViewModel() {
 
 
 
