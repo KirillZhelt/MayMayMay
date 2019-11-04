@@ -8,7 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import dev.kirillzhelt.maymaymay.MainApplication
 import dev.kirillzhelt.maymaymay.R
 
@@ -24,9 +26,9 @@ class DaysListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_days_list, container, false)
+        val inflatedView = inflater.inflate(R.layout.fragment_days_list, container, false)
 
-        val daysListRecyclerView: RecyclerView = view.findViewById(R.id.fragment_days_list_rv)
+        val daysListRecyclerView: RecyclerView = inflatedView.findViewById(R.id.fragment_days_list_rv)
         val daysListAdapter = DaysListAdapter()
         daysListRecyclerView.adapter = daysListAdapter
 
@@ -34,7 +36,12 @@ class DaysListFragment : Fragment() {
             daysListAdapter.days = days
         })
 
-        return view
+        val newDayFab: FloatingActionButton = inflatedView.findViewById(R.id.fragment_days_list_new_day_fab)
+        newDayFab.setOnClickListener { view ->
+            view.findNavController().navigate(DaysListFragmentDirections.actionDaysListFragmentToNewDayFragment())
+        }
+
+        return inflatedView
     }
 
 
