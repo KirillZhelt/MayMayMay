@@ -1,21 +1,24 @@
 package dev.kirillzhelt.maymaymay.newday
 
 
+import android.app.DatePickerDialog
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.DatePicker
 import androidx.fragment.app.viewModels
+import com.google.android.material.datepicker.MaterialDatePicker
 import dev.kirillzhelt.maymaymay.MainApplication
 import dev.kirillzhelt.maymaymay.R
-import dev.kirillzhelt.maymaymay.datepicker.DatePickerDialogFragment
 
 /**
  * A simple [Fragment] subclass.
  */
-class NewDayFragment : Fragment() {
+class NewDayFragment: Fragment() {
 
     private val newDayViewModel: NewDayViewModel by viewModels { NewDayViewModelFactory(MainApplication.daysRepository) }
 
@@ -36,8 +39,13 @@ class NewDayFragment : Fragment() {
     }
 
     private fun showDatePickerDialog(view: View) {
-        val datePickerDialogFragment = DatePickerDialogFragment()
-        datePickerDialogFragment.show(fragmentManager!!, "datePicker")
+        val datePickerBuilder: MaterialDatePicker.Builder<Long> = MaterialDatePicker.Builder.datePicker()
+        datePickerBuilder.setTitleText("Hello world")
+
+        val picker = datePickerBuilder.build()
+        picker.show(fragmentManager!!, "datePicker")
+
     }
+
 
 }
