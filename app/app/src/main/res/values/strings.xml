@@ -12,4 +12,5 @@
     <string name="grade_placeholder">10</string>
     <string name="choose_date_button">Choose date</string>
     <string name="date_picker_title">What day do you want to write about?</string>
+    <string name="description_label">What did you do on this day?</string>
 </resources>
