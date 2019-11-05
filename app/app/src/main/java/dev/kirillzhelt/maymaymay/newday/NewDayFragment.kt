@@ -6,7 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import com.google.android.material.datepicker.MaterialDatePicker
 import dev.kirillzhelt.maymaymay.MainApplication
 import dev.kirillzhelt.maymaymay.R
@@ -26,8 +28,12 @@ class NewDayFragment: Fragment() {
         val inflatedView = inflater.inflate(R.layout.fragment_new_day, container, false)
 
         val chooseDateButton: Button = inflatedView.findViewById(R.id.fragment_new_day_choose_date_btn)
-
         chooseDateButton.setOnClickListener(this::showDatePickerDialog)
+
+        val dateTextView: TextView = inflatedView.findViewById(R.id.fragment_new_day_date_tv)
+        newDayViewModel.pickedDate.observe(this, Observer { date ->
+            dateTextView.text = date.toString()
+        })
 
         return inflatedView
     }
