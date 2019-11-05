@@ -31,8 +31,8 @@ class NewDayFragment: Fragment() {
         chooseDateButton.setOnClickListener(this::showDatePickerDialog)
 
         val dateTextView: TextView = inflatedView.findViewById(R.id.fragment_new_day_date_tv)
-        newDayViewModel.pickedDate.observe(this, Observer { date ->
-            dateTextView.text = date.toString()
+        newDayViewModel.formattedPickedDate.observe(this, Observer { formattedDate ->
+            dateTextView.text = formattedDate
         })
 
         return inflatedView
