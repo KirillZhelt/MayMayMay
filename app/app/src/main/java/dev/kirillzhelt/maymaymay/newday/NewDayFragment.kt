@@ -35,6 +35,9 @@ class NewDayFragment: Fragment() {
             dateTextView.text = formattedDate
         })
 
+        // TODO: add grade picker and button, when button is pressed, save day and go back to days list
+        // TODO: add back arrow
+
         return inflatedView
     }
 
