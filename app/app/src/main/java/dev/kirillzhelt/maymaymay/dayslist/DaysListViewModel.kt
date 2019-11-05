@@ -6,7 +6,6 @@ import dev.kirillzhelt.maymaymay.daysmodel.Day
 import dev.kirillzhelt.maymaymay.daysmodel.DaysRepository
 
 class DaysListViewModel(private val daysRepository: DaysRepository): ViewModel() {
-
     val days: LiveData<List<Day>> = daysRepository.getAllDays()
 
 }
