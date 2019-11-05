@@ -7,7 +7,8 @@ import java.util.*
 
 class DaysRepository {
 
-    private val tags: MutableList<String> = mutableListOf("Good sleep", "Friends", "Sport")
+    private val tags: List<String> = listOf("Good sleep", "Friends", "Sport")
+
     private val daysList: MutableList<Day> = mutableListOf()
 
     private val _days: MutableLiveData<List<Day>> = MutableLiveData()
@@ -46,20 +47,23 @@ class DaysRepository {
     }
 
     fun deleteDay(day: Day): Boolean {
-        return daysList.remove(day)
+        val result = daysList.remove(day)
+        _days.value = daysList
+
+        return result
     }
 
     fun getAllDays(): LiveData<List<Day>> {
         return days
     }
 
-    fun addNewTag(tag: String) {
-        tags.add(tag)
-    }
-
-    fun deleteTag(tag: String): Boolean {
-        return tags.remove(tag)
-    }
+//    fun addNewTag(tag: String) {
+//        tags.add(tag)
+//    }
+//
+//    fun deleteTag(tag: String): Boolean {
+//        return tags.remove(tag)
+//    }
 
     fun getAllTags(): List<String> {
         return tags
