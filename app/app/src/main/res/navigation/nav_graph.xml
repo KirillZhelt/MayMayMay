@@ -8,8 +8,8 @@
     <fragment
         android:id="@+id/daysListFragment"
         android:name="dev.kirillzhelt.maymaymay.dayslist.DaysListFragment"
-        android:label="fragment_days_list"
-        tools:layout="@layout/fragment_days_list" >
+        android:label="Days"
+        tools:layout="@layout/fragment_days_list">
         <action
             android:id="@+id/action_daysListFragment_to_newDayFragment"
             app:destination="@id/newDayFragment" />
@@ -20,8 +20,8 @@
     <fragment
         android:id="@+id/newDayFragment"
         android:name="dev.kirillzhelt.maymaymay.newday.NewDayFragment"
-        android:label="fragment_new_day"
-        tools:layout="@layout/fragment_new_day" >
+        android:label="Add new day"
+        tools:layout="@layout/fragment_new_day">
         <action
             android:id="@+id/action_newDayFragment_to_daysListFragment"
             app:destination="@id/daysListFragment" />
@@ -29,8 +29,8 @@
     <fragment
         android:id="@+id/editDayFragment"
         android:name="dev.kirillzhelt.maymaymay.editday.EditDayFragment"
-        android:label="fragment_edit_day"
-        tools:layout="@layout/fragment_edit_day" >
+        android:label="Edit day"
+        tools:layout="@layout/fragment_edit_day">
         <action
             android:id="@+id/action_editDayFragment_to_dayInfoFragment"
             app:destination="@id/dayInfoFragment" />
@@ -38,8 +38,8 @@
     <fragment
         android:id="@+id/dayInfoFragment"
         android:name="dev.kirillzhelt.maymaymay.dayinfo.DayInfoFragment"
-        android:label="fragment_day_info"
-        tools:layout="@layout/fragment_day_info" >
+        android:label="Day"
+        tools:layout="@layout/fragment_day_info">
         <action
             android:id="@+id/action_dayInfoFragment_to_editDayFragment"
             app:destination="@id/editDayFragment" />
