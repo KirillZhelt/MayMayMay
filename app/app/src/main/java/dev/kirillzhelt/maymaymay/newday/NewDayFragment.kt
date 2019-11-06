@@ -80,10 +80,16 @@ class NewDayFragment: Fragment() {
         val addDayButton: Button = inflatedView.findViewById(R.id.fragment_new_day_add_btn)
         addDayButton.setOnClickListener { view ->
             newDayViewModel.apply {
-                saveCheckedTags(tagsChipGroup.findCheckedChipTexts())
+                saveCheckedTags(tagsChipGroup.checkedChipIds)
                 addNewDay()
             }
         }
+
+        newDayViewModel.checkedTagIds.observe(this, Observer { checkedTagIds ->
+            checkedTagIds.forEach { tagId ->
+                tagsChipGroup.check(tagId)
+            }
+        })
 
         return inflatedView
     }
@@ -91,7 +97,7 @@ class NewDayFragment: Fragment() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
-        newDayViewModel.saveCheckedTags(tagsChipGroup.findCheckedChipTexts())
+        newDayViewModel.saveCheckedTags(tagsChipGroup.checkedChipIds)
     }
 
     private fun showDatePickerDialog(view: View) {

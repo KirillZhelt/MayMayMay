@@ -31,6 +31,15 @@ class NewDayViewModel(private val daysRepository: DaysRepository): ViewModel() {
 
     val tags: LiveData<List<String>>
 
+    private val _checkedTagIds = MutableLiveData<List<Int>>(listOf())
+
+    val checkedTagIds: LiveData<List<Int>> = _checkedTagIds
+
+    // TODO: add MediatorLiveData to combine tags and checkedTagIds
+    // https://stackoverflow.com/questions/50599830/how-to-combine-two-live-data-one-after-the-other
+
+    // TODO: live data for day description
+
     init {
         val gradeValues = DayGrade.values().map { dayGrade -> dayGrade.grade }
 
@@ -54,16 +63,18 @@ class NewDayViewModel(private val daysRepository: DaysRepository): ViewModel() {
         Log.i("Grade picked", _pickedGrade.value.toString())
     }
 
-    fun saveCheckedTags(tags: List<String>) {
+    fun saveCheckedTags(checkedTagIds: List<Int>) {
+        _checkedTagIds.value = checkedTagIds
 
-        Log.i("Tags saved", tags.toString())
-
+        Log.i("Tags saved", _checkedTagIds.value.toString())
     }
 
     fun addNewDay() {
         Log.i("Add", "Day added")
 
-//        val day = Day()
+        // TODO: create day
+
+//        val day = Day(_pickedDate.value!!, )
 //
 //        daysRepository.addNewDay(day)
     }
