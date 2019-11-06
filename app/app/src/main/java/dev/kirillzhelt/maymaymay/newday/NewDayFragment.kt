@@ -36,7 +36,6 @@ class NewDayFragment: Fragment() {
             dateTextView.text = formattedDate
         })
 
-        // TODO: add grade picker and button, when button is pressed, save day and go back to days list
         val gradeNumberPicker: NumberPicker = inflatedView.findViewById(R.id.fragment_new_day_grade_np)
         newDayViewModel.minGradeValue.observe(this, Observer { minGrade ->
             gradeNumberPicker.minValue = minGrade
@@ -63,6 +62,9 @@ class NewDayFragment: Fragment() {
         picker.addOnPositiveButtonClickListener(newDayViewModel::onDatePicked)
 
         picker.show(fragmentManager!!, "datePicker")
+
+        // TODO: resize edit text when to show all text, maybe make it scrollable
+        // TODO: add button, when button is pressed, save day and go back to days list
     }
 
     private fun onGradeNumberPickerValueChanged(numberPicker: NumberPicker, oldValue: Int, newValue: Int) {
