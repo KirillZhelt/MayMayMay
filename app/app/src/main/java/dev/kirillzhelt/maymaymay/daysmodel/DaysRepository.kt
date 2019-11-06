@@ -7,7 +7,8 @@ import java.util.*
 
 class DaysRepository {
 
-    private val tags: List<String> = listOf("Good sleep", "Friends", "Sport")
+    private val tags: List<String> = listOf("Good sleep", "Friends", "Sport", "Education", "Cinema",
+        "Restaurant", "Birthday")
 
     private val daysList: MutableList<Day> = mutableListOf()
 

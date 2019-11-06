@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import dev.kirillzhelt.maymaymay.daysmodel.Day
 import dev.kirillzhelt.maymaymay.daysmodel.DayGrade
 import dev.kirillzhelt.maymaymay.daysmodel.DaysRepository
 import dev.kirillzhelt.maymaymay.daysmodel.exceptions.NoGradesException
@@ -28,6 +29,8 @@ class NewDayViewModel(private val daysRepository: DaysRepository): ViewModel() {
 
     val pickedGrade: LiveData<Int> = _pickedGrade
 
+    val tags: LiveData<List<String>>
+
     init {
         val gradeValues = DayGrade.values().map { dayGrade -> dayGrade.grade }
 
@@ -35,6 +38,8 @@ class NewDayViewModel(private val daysRepository: DaysRepository): ViewModel() {
         maxGradeValue = MutableLiveData(gradeValues.max() ?: throw NoGradesException())
 
         _pickedGrade.value = maxGradeValue.value
+
+        tags = MutableLiveData(daysRepository.getAllTags())
     }
 
     fun onDatePicked(selection: Long) {
@@ -47,5 +52,19 @@ class NewDayViewModel(private val daysRepository: DaysRepository): ViewModel() {
         _pickedGrade.value = grade
 
         Log.i("Grade picked", _pickedGrade.value.toString())
+    }
+
+    fun saveCheckedTags(tags: List<String>) {
+
+        Log.i("Tags saved", tags.toString())
+
+    }
+
+    fun addNewDay() {
+        Log.i("Add", "Day added")
+
+//        val day = Day()
+//
+//        daysRepository.addNewDay(day)
     }
 }

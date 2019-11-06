@@ -8,11 +8,16 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.NumberPicker
 import android.widget.TextView
+import androidx.core.view.marginBottom
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipDrawable
+import com.google.android.material.chip.ChipGroup
 import com.google.android.material.datepicker.MaterialDatePicker
 import dev.kirillzhelt.maymaymay.MainApplication
 import dev.kirillzhelt.maymaymay.R
+import dev.kirillzhelt.maymaymay.utils.findCheckedChipTexts
 
 /**
  * A simple [Fragment] subclass.
@@ -20,6 +25,8 @@ import dev.kirillzhelt.maymaymay.R
 class NewDayFragment: Fragment() {
 
     private val newDayViewModel: NewDayViewModel by viewModels { NewDayViewModelFactory(MainApplication.daysRepository) }
+
+    private lateinit var tagsChipGroup: ChipGroup
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,9 +56,42 @@ class NewDayFragment: Fragment() {
             gradeNumberPicker.value = grade
         })
 
-        gradeNumberPicker.setOnValueChangedListener(this::onGradeNumberPickerValueChanged)
+        gradeNumberPicker.setOnValueChangedListener { _, _, newValue ->
+            newDayViewModel.onGradePicked(newValue)
+        }
+
+        tagsChipGroup = inflatedView.findViewById(R.id.fragment_new_day_tags_cg)
+
+        newDayViewModel.tags.observe(this, Observer { tags ->
+            tagsChipGroup.removeAllViews()
+
+            tags.forEach { tag ->
+                val chip = Chip(requireContext()).apply {
+                    text = tag
+                }
+
+                val chipDrawable = ChipDrawable.createFromAttributes(requireContext(), null, 0, R.style.Widget_MaterialComponents_Chip_Filter)
+                chip.setChipDrawable(chipDrawable)
+
+                tagsChipGroup.addView(chip)
+            }
+        })
+
+        val addDayButton: Button = inflatedView.findViewById(R.id.fragment_new_day_add_btn)
+        addDayButton.setOnClickListener { view ->
+            newDayViewModel.apply {
+                saveCheckedTags(tagsChipGroup.findCheckedChipTexts())
+                addNewDay()
+            }
+        }
 
         return inflatedView
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        newDayViewModel.saveCheckedTags(tagsChipGroup.findCheckedChipTexts())
     }
 
     private fun showDatePickerDialog(view: View) {
@@ -62,12 +102,5 @@ class NewDayFragment: Fragment() {
         picker.addOnPositiveButtonClickListener(newDayViewModel::onDatePicked)
 
         picker.show(fragmentManager!!, "datePicker")
-
-        // TODO: resize edit text when to show all text, maybe make it scrollable
-        // TODO: add button, when button is pressed, save day and go back to days list
-    }
-
-    private fun onGradeNumberPickerValueChanged(numberPicker: NumberPicker, oldValue: Int, newValue: Int) {
-        newDayViewModel.onGradePicked(newValue)
     }
 }
