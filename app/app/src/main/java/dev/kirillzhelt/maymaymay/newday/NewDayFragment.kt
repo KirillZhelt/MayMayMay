@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.NumberPicker
 import android.widget.TextView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -36,7 +37,20 @@ class NewDayFragment: Fragment() {
         })
 
         // TODO: add grade picker and button, when button is pressed, save day and go back to days list
-        // TODO: add back arrow
+        val gradeNumberPicker: NumberPicker = inflatedView.findViewById(R.id.fragment_new_day_grade_np)
+        newDayViewModel.minGradeValue.observe(this, Observer { minGrade ->
+            gradeNumberPicker.minValue = minGrade
+        })
+
+        newDayViewModel.maxGradeValue.observe(this, Observer { maxGrade ->
+            gradeNumberPicker.maxValue = maxGrade
+        })
+
+        newDayViewModel.pickedGrade.observe(this, Observer { grade ->
+            gradeNumberPicker.value = grade
+        })
+
+        gradeNumberPicker.setOnValueChangedListener(this::onGradeNumberPickerValueChanged)
 
         return inflatedView
     }
@@ -51,5 +65,7 @@ class NewDayFragment: Fragment() {
         picker.show(fragmentManager!!, "datePicker")
     }
 
-
+    private fun onGradeNumberPickerValueChanged(numberPicker: NumberPicker, oldValue: Int, newValue: Int) {
+        newDayViewModel.onGradePicked(newValue)
+    }
 }

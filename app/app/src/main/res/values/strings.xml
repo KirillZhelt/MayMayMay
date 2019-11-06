@@ -14,4 +14,6 @@
     <string name="date_picker_title">What day do you want to write about?</string>
     <string name="description_label">What did you do on this day?</string>
     <string name="description_placeholder">Write just something</string>
+    <string name="grade_picker_title">Estimate you day</string>
+    <string name="add_day_button_title">Add day</string>
 </resources>
