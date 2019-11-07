@@ -1,10 +1,7 @@
 package dev.kirillzhelt.maymaymay.newday
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import dev.kirillzhelt.maymaymay.daysmodel.Day
 import dev.kirillzhelt.maymaymay.daysmodel.DayGrade
 import dev.kirillzhelt.maymaymay.daysmodel.DaysRepository
@@ -29,14 +26,10 @@ class NewDayViewModel(private val daysRepository: DaysRepository): ViewModel() {
 
     val pickedGrade: LiveData<Int> = _pickedGrade
 
-    val tags: LiveData<List<String>>
+    private val _tags: MutableLiveData<List<String>>
+    private val _checkedTags = MutableLiveData<List<String>>(emptyList())
 
-    private val _checkedTagIds = MutableLiveData<List<Int>>(listOf())
-
-    val checkedTagIds: LiveData<List<Int>> = _checkedTagIds
-
-    // TODO: add MediatorLiveData to combine tags and checkedTagIds
-    // https://stackoverflow.com/questions/50599830/how-to-combine-two-live-data-one-after-the-other
+    val tags = MediatorLiveData<List<Pair<String, Boolean>>>()
 
     private val _description = MutableLiveData<String>()
 
@@ -50,7 +43,23 @@ class NewDayViewModel(private val daysRepository: DaysRepository): ViewModel() {
 
         _pickedGrade.value = maxGradeValue.value
 
-        tags = MutableLiveData(daysRepository.getAllTags())
+        _tags = MutableLiveData(daysRepository.getAllTags())
+
+        tags.addSource(_tags) { newTags ->
+            tags.value = newTags.map { newTag ->
+                Pair(newTag, _checkedTags.value?.contains(newTag) ?: false)
+            }
+
+            Log.i("Tags", "mediator: ${tags.value}")
+        }
+
+        tags.addSource(_checkedTags) { newCheckedTags ->
+            tags.value = tags.value?.map { tag ->
+                Pair(tag.first, newCheckedTags.contains(tag.first))
+            }
+
+            Log.i("Tags", "mediator: ${tags.value}")
+        }
     }
 
     fun onDatePicked(selection: Long) {
@@ -65,10 +74,10 @@ class NewDayViewModel(private val daysRepository: DaysRepository): ViewModel() {
         Log.i("Grade picked", _pickedGrade.value.toString())
     }
 
-    fun saveCheckedTags(checkedTagIds: List<Int>) {
-        _checkedTagIds.value = checkedTagIds
+    fun saveCheckedTags(checkedTags: List<String>) {
+        _checkedTags.value = checkedTags
 
-        Log.i("Tags saved", _checkedTagIds.value.toString())
+        Log.i("Tags saved", _checkedTags.value.toString())
     }
 
     fun saveDescription(description: String) {

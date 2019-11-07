@@ -1,6 +1,7 @@
 package dev.kirillzhelt.maymaymay.newday
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -70,11 +71,13 @@ class NewDayFragment: Fragment() {
 
             tags.forEach { tag ->
                 val chip = Chip(requireContext()).apply {
-                    text = tag
+                    text = tag.first
                 }
 
-                val chipDrawable = ChipDrawable.createFromAttributes(requireContext(), null, 0, R.style.Widget_MaterialComponents_Chip_Filter)
+                val chipDrawable = ChipDrawable.createFromAttributes(requireContext(),
+                    null, 0, R.style.Widget_MaterialComponents_Chip_Filter)
                 chip.setChipDrawable(chipDrawable)
+                chip.isChecked = tag.second
 
                 tagsChipGroup.addView(chip)
             }
@@ -86,12 +89,6 @@ class NewDayFragment: Fragment() {
 
             newDayViewModel.addNewDay()
         }
-
-        newDayViewModel.checkedTagIds.observe(this, Observer { checkedTagIds ->
-            checkedTagIds.forEach { tagId ->
-                tagsChipGroup.check(tagId)
-            }
-        })
 
         descriptionEditText = inflatedView.findViewById(R.id.fragment_new_day_description_et)
         newDayViewModel.description.observe(this, Observer { description ->
@@ -110,7 +107,7 @@ class NewDayFragment: Fragment() {
     private fun saveStateInViewModel() {
         newDayViewModel.apply {
             saveDescription(descriptionEditText.text.toString())
-            saveCheckedTags(tagsChipGroup.checkedChipIds)
+            saveCheckedTags(tagsChipGroup.findCheckedChipTexts())
         }
     }
 
