@@ -21,7 +21,7 @@ class DaysRepository {
     init {
         val simpleDateFormat = SimpleDateFormat("dd-mm-yyyy", Locale.US)
 
-        for (i in 0..24) {
+        for (i in 0..5) {
             val date = simpleDateFormat.parse("$i-10-2019")!!
 
             val firstTagIndex = (0..tags.size).random()

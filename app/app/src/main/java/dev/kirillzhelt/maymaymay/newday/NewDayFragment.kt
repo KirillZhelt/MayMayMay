@@ -85,6 +85,8 @@ class NewDayFragment: Fragment() {
 
         val addDayButton: Button = inflatedView.findViewById(R.id.fragment_new_day_add_btn)
         addDayButton.setOnClickListener { view ->
+            // TODO: do not allow to add days with empty descriptions and the same date as already exists
+
             saveStateInViewModel()
 
             newDayViewModel.addNewDay()
