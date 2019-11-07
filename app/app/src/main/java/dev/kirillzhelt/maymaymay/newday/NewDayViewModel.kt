@@ -88,7 +88,7 @@ class NewDayViewModel(private val daysRepository: DaysRepository): ViewModel() {
         Log.i("Add", "Day added")
 
         val day = Day(_pickedDate.value!!, _description.value!!, _checkedTags.value!!.toMutableList(),
-            DayGrade.values().find { _pickedGrade.value!! == it.grade } !!)
+            DayGrade.fromInt(_pickedGrade.value!!))
 
         daysRepository.addNewDay(day)
 
