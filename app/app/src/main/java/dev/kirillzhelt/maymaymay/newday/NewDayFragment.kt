@@ -86,15 +86,20 @@ class NewDayFragment: Fragment() {
 
         val addDayButton: Button = inflatedView.findViewById(R.id.fragment_new_day_add_btn)
         addDayButton.setOnClickListener { view ->
-            // TODO: do not allow to add days with empty descriptions and
+            // TODO: do not allow to add days with
             //  the same date as already exists (check edittext text, and
             //  block some dates in calendar)
+            if (descriptionEditText.text.isEmpty()) {
+                descriptionEditText.error = getString(R.string.description_empty_error)
+            } else {
+                descriptionEditText.error = null
 
-            saveStateInViewModel()
+                saveStateInViewModel()
 
-            newDayViewModel.addNewDay()
+                newDayViewModel.addNewDay()
 
-            findNavController().navigate(NewDayFragmentDirections.actionNewDayFragmentToDaysListFragment())
+                findNavController().navigate(NewDayFragmentDirections.actionNewDayFragmentToDaysListFragment())
+            }
         }
 
         descriptionEditText = inflatedView.findViewById(R.id.fragment_new_day_description_et)

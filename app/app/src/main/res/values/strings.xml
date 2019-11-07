@@ -16,4 +16,5 @@
     <string name="description_placeholder">Write just something</string>
     <string name="grade_picker_title">Estimate you day</string>
     <string name="add_day_button_title">Add day</string>
+    <string name="description_empty_error">You should not leave description empty</string>
 </resources>
