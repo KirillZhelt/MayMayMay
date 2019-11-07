@@ -11,7 +11,7 @@ import java.util.*
 // https://developer.android.com/training/data-storage/room
 // https://developer.android.com/training/data-storage/room/referencing-data
 
-@Entity(tableName = "day_table", indices = [Index(value = ["day_date"], unique = true)])
+@Entity(tableName = "days", indices = [Index(value = ["day_date"], unique = true)])
 data class DayEntity(
     @PrimaryKey
     @ColumnInfo(name = "id")
