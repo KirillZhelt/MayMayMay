@@ -13,6 +13,7 @@ import android.widget.TextView
 import androidx.core.view.marginBottom
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipDrawable
 import com.google.android.material.chip.ChipGroup
@@ -85,11 +86,15 @@ class NewDayFragment: Fragment() {
 
         val addDayButton: Button = inflatedView.findViewById(R.id.fragment_new_day_add_btn)
         addDayButton.setOnClickListener { view ->
-            // TODO: do not allow to add days with empty descriptions and the same date as already exists
+            // TODO: do not allow to add days with empty descriptions and
+            //  the same date as already exists (check edittext text, and
+            //  block some dates in calendar)
 
             saveStateInViewModel()
 
             newDayViewModel.addNewDay()
+
+            findNavController().navigate(NewDayFragmentDirections.actionNewDayFragmentToDaysListFragment())
         }
 
         descriptionEditText = inflatedView.findViewById(R.id.fragment_new_day_description_et)
