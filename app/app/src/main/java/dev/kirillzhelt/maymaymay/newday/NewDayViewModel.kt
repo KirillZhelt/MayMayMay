@@ -38,7 +38,9 @@ class NewDayViewModel(private val daysRepository: DaysRepository): ViewModel() {
     // TODO: add MediatorLiveData to combine tags and checkedTagIds
     // https://stackoverflow.com/questions/50599830/how-to-combine-two-live-data-one-after-the-other
 
-    // TODO: live data for day description
+    private val _description = MutableLiveData<String>()
+
+    val description: LiveData<String> = _description
 
     init {
         val gradeValues = DayGrade.values().map { dayGrade -> dayGrade.grade }
@@ -67,6 +69,10 @@ class NewDayViewModel(private val daysRepository: DaysRepository): ViewModel() {
         _checkedTagIds.value = checkedTagIds
 
         Log.i("Tags saved", _checkedTagIds.value.toString())
+    }
+
+    fun saveDescription(description: String) {
+        _description.value = description
     }
 
     fun addNewDay() {

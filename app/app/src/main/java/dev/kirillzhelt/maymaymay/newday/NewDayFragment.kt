@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
 import android.widget.NumberPicker
 import android.widget.TextView
 import androidx.core.view.marginBottom
@@ -18,6 +19,7 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import dev.kirillzhelt.maymaymay.MainApplication
 import dev.kirillzhelt.maymaymay.R
 import dev.kirillzhelt.maymaymay.utils.findCheckedChipTexts
+import kotlinx.android.synthetic.main.fragment_new_day.*
 
 /**
  * A simple [Fragment] subclass.
@@ -27,6 +29,7 @@ class NewDayFragment: Fragment() {
     private val newDayViewModel: NewDayViewModel by viewModels { NewDayViewModelFactory(MainApplication.daysRepository) }
 
     private lateinit var tagsChipGroup: ChipGroup
+    private lateinit var descriptionEditText: EditText
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -79,10 +82,9 @@ class NewDayFragment: Fragment() {
 
         val addDayButton: Button = inflatedView.findViewById(R.id.fragment_new_day_add_btn)
         addDayButton.setOnClickListener { view ->
-            newDayViewModel.apply {
-                saveCheckedTags(tagsChipGroup.checkedChipIds)
-                addNewDay()
-            }
+            saveStateInViewModel()
+
+            newDayViewModel.addNewDay()
         }
 
         newDayViewModel.checkedTagIds.observe(this, Observer { checkedTagIds ->
@@ -91,13 +93,25 @@ class NewDayFragment: Fragment() {
             }
         })
 
+        descriptionEditText = inflatedView.findViewById(R.id.fragment_new_day_description_et)
+        newDayViewModel.description.observe(this, Observer { description ->
+            descriptionEditText.setText(description, TextView.BufferType.EDITABLE)
+        })
+
         return inflatedView
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
-        newDayViewModel.saveCheckedTags(tagsChipGroup.checkedChipIds)
+        saveStateInViewModel()
+    }
+
+    private fun saveStateInViewModel() {
+        newDayViewModel.apply {
+            saveDescription(descriptionEditText.text.toString())
+            saveCheckedTags(tagsChipGroup.checkedChipIds)
+        }
     }
 
     private fun showDatePickerDialog(view: View) {
