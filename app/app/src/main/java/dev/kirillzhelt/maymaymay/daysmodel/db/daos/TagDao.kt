@@ -19,4 +19,11 @@ interface TagDao {
     """)
     fun getTags(): LiveData<List<TagEntity>>
 
+    @Query("""
+        SELECT tags.id
+        FROM tags
+        WHERE tags.tag IN (:tags)
+    """)
+    fun getTagIds(tags: List<String>): List<Int>
+
 }

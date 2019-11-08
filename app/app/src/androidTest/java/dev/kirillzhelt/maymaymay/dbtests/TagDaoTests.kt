@@ -86,4 +86,19 @@ class TagDaoTests {
         }
     }
 
+    @Test
+    @Throws(Exception::class)
+    fun insertManyTagsAndGetTheirIdsByStrings() {
+        val tags = mutableListOf<TagEntity>()
+
+        for (i in 0..5) {
+            tags.add(TagEntity("$i", i + 1))
+        }
+
+        for (tag in tags) {
+            tagDao.insert(tag)
+        }
+
+        assertEquals(listOf(1, 3), tagDao.getTagIds(listOf("0", "2")))
+    }
 }
