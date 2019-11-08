@@ -7,7 +7,7 @@ import java.util.*
 @Dao
 interface DayDao {
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(day: DayEntity)
 
     @Query("""

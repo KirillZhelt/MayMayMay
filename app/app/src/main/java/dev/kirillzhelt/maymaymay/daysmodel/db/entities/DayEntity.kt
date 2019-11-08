@@ -13,9 +13,9 @@ import java.util.*
 
 @Entity(tableName = "days", indices = [Index(value = ["day_date"], unique = true)])
 data class DayEntity(
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
-    val id: Int,
+    val id: Int = 0,
 
     @ColumnInfo(name = "day_date")
     val date: Date,
