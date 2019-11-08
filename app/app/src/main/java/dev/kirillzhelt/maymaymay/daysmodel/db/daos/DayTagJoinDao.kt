@@ -1,5 +1,6 @@
 package dev.kirillzhelt.maymaymay.daysmodel.db.daos
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
@@ -21,7 +22,7 @@ interface DayTagJoinDao {
         ON tags.id = day_tag_join.tag_id
         WHERE day_tag_join.day_id = :dayId
     """)
-    fun getTagsForDay(dayId: Int): List<TagEntity>
+    fun getTagsForDay(dayId: Int): LiveData<List<TagEntity>>
 
 
 }

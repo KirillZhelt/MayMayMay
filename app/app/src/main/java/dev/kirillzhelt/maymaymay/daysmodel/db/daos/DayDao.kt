@@ -1,5 +1,6 @@
 package dev.kirillzhelt.maymaymay.daysmodel.db.daos
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
 import dev.kirillzhelt.maymaymay.daysmodel.db.entities.DayEntity
 import java.util.*
@@ -14,7 +15,7 @@ interface DayDao {
         SELECT *
         FROM days
     """)
-    fun getDays(): List<DayEntity>
+    fun getDays(): LiveData<List<DayEntity>>
 
     @Update
     fun update(day: DayEntity)
@@ -26,6 +27,6 @@ interface DayDao {
         SELECT days.day_date
         FROM days
     """)
-    fun getDates(): List<Date>
+    fun getDates(): LiveData<List<Date>>
 
 }

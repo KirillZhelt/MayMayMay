@@ -1,6 +1,6 @@
 package dev.kirillzhelt.maymaymay.daysmodel.db.daos
 
-import android.nfc.Tag
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -17,6 +17,6 @@ interface TagDao {
         SELECT * 
         FROM tags
     """)
-    fun getTags(): List<TagEntity>
+    fun getTags(): LiveData<List<TagEntity>>
 
 }
