@@ -10,7 +10,7 @@ class MainApplication: Application() {
         lateinit var dayRoomDatabase: DayRoomDatabase
 
         val daysRepository: DaysRepository by lazy {
-            DaysRepository()
+            DaysRepository(dayRoomDatabase.dayDao(), dayRoomDatabase.tagDao(), dayRoomDatabase.dayTagJoinDao())
         }
     }
 

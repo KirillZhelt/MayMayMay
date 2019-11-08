@@ -2,10 +2,14 @@ package dev.kirillzhelt.maymaymay.daysmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import dev.kirillzhelt.maymaymay.daysmodel.db.daos.DayDao
+import dev.kirillzhelt.maymaymay.daysmodel.db.daos.DayTagJoinDao
+import dev.kirillzhelt.maymaymay.daysmodel.db.daos.TagDao
 import java.text.SimpleDateFormat
 import java.util.*
 
-class DaysRepository {
+class DaysRepository(private val dayDao: DayDao, private val tagDao: TagDao,
+                     private val dayTagJoinDao: DayTagJoinDao) {
 
     private val tags: List<String> = listOf("Good sleep", "Friends", "Sport", "Education", "Cinema",
         "Restaurant", "Birthday")
