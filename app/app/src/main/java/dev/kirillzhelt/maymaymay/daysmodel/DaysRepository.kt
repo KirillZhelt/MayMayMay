@@ -27,29 +27,24 @@ class DaysRepository(private val dayDao: DayDao, private val tagDao: TagDao,
         }
     }
 
-    fun deleteDay(day: Day) {
-
-
-
+    suspend fun deleteDay(day: Day) {
+        dayDao.deleteByDate(day.date)
     }
 
     fun getAllDays(): LiveData<List<Day>> {
-        //return days
-        return MutableLiveData<List<Day>>()
+        throw NotImplementedError()
     }
 
     fun addNewTag(tag: String) {
-//        tags.add(tag)
+        throw NotImplementedError()
     }
 
     fun deleteTag(tag: String): Boolean {
-//        return tags.remove(tag)
-        return false
+        throw NotImplementedError()
     }
 
     fun getAllTags(): List<String> {
-//        return tags
-        return listOf()
+        throw NotImplementedError()
     }
 
 }
