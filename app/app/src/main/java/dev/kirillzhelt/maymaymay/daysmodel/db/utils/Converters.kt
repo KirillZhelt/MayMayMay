@@ -12,7 +12,19 @@ class Converters {
 
     @TypeConverter
     fun timestampFromDate(date: Date?): Long? {
-        return date?.time
+        if (date != null) {
+            val calendar = Calendar.getInstance()
+            calendar.time = date
+
+            calendar.set(Calendar.HOUR_OF_DAY, 0)
+            calendar.set(Calendar.MINUTE, 0)
+            calendar.set(Calendar.SECOND, 0)
+            calendar.set(Calendar.MILLISECOND, 0)
+
+            return calendar.time.time
+        }
+
+        return null
     }
 
     @TypeConverter

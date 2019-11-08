@@ -1,6 +1,7 @@
 package dev.kirillzhelt.maymaymay.daysmodel
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import dev.kirillzhelt.maymaymay.daysmodel.db.daos.DayDao
@@ -15,13 +16,23 @@ import java.util.*
 class DaysRepository(private val dayDao: DayDao, private val tagDao: TagDao,
                      private val dayTagJoinDao: DayTagJoinDao) {
 
+    private val _days = MediatorLiveData<List<Day>>()
+
+    init {
+        _days.addSource(dayDao.getDays()) { dayEntities ->
+            _days.value = dayEntities.map { dayEntity ->
+                Day(dayEntity.date, dayEntity.description, dayEntity.grade, listOf())
+            }
+        }
+    }
+
     suspend fun addNewDay(day: Day) {
-        val dayEntity = DayEntity(day.date, day.description, day.grade, day.id ?: 0)
+        val dayEntity = DayEntity(day.date, day.description, day.grade)
 
         dayDao.insert(dayEntity)
         val dayId = dayDao.getDayId(day.date)
 
-        if (dayId != null) {
+        if (dayId != null && day.tags.isNotEmpty()) {
             val dayTagJoins = tagDao.getTagIds(day.tags).map { tagId -> DayTagJoin(dayId, tagId) }
 
             dayTagJoinDao.insert(dayTagJoins)
@@ -33,14 +44,14 @@ class DaysRepository(private val dayDao: DayDao, private val tagDao: TagDao,
     }
 
     fun getAllDays(): LiveData<List<Day>> {
-        throw NotImplementedError()
+        return _days
     }
 
     fun addNewTag(tag: String) {
         throw NotImplementedError()
     }
 
-    fun deleteTag(tag: String): Boolean {
+    fun deleteTag(tag: String) {
         throw NotImplementedError()
     }
 
