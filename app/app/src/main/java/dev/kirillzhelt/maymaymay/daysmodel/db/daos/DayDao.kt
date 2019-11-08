@@ -9,7 +9,7 @@ import java.util.*
 interface DayDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insert(day: DayEntity)
+    suspend fun insert(day: DayEntity)
 
     @Query("""
         SELECT *
@@ -18,10 +18,10 @@ interface DayDao {
     fun getDays(): LiveData<List<DayEntity>>
 
     @Update
-    fun update(day: DayEntity)
+    suspend fun update(day: DayEntity)
 
     @Delete
-    fun delete(day: DayEntity)
+    suspend fun delete(day: DayEntity)
 
     @Query("""
         SELECT days.day_date

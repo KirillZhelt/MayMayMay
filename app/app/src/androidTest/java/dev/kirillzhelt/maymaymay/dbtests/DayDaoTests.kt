@@ -11,6 +11,7 @@ import dev.kirillzhelt.maymaymay.daysmodel.db.DayRoomDatabase
 import dev.kirillzhelt.maymaymay.daysmodel.db.daos.DayDao
 import dev.kirillzhelt.maymaymay.daysmodel.db.entities.DayEntity
 import dev.kirillzhelt.maymaymay.utils.observeOnce
+import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -48,7 +49,7 @@ class DayDaoTests {
 
     @Test
     @Throws(Exception::class)
-    fun insertOneDayAndReadInList() {
+    fun insertOneDayAndReadInList() = runBlocking {
         val day = DayEntity(Date(System.currentTimeMillis()), "jumping running sleeping", DayGrade.EIGHT, 1)
 
         dayDao.insert(day)
@@ -60,7 +61,7 @@ class DayDaoTests {
 
     @Test
     @Throws(Exception::class)
-    fun insertOneDayAndDeleteIt() {
+    fun insertOneDayAndDeleteIt() = runBlocking {
         val day = DayEntity(Date(System.currentTimeMillis()), "jumping running sleeping", DayGrade.EIGHT, 1)
 
         dayDao.insert(day)
@@ -73,7 +74,7 @@ class DayDaoTests {
 
     @Test
     @Throws(Exception::class)
-    fun insertDaysWithTheSameDate() {
+    fun insertDaysWithTheSameDate() = runBlocking {
         val date = Date(System.currentTimeMillis())
 
         val day1 = DayEntity(date, "sleeping", DayGrade.TWO, 1)
@@ -90,7 +91,7 @@ class DayDaoTests {
 
     @Test
     @Throws(Exception::class)
-    fun insertManyDaysAndReadInList() {
+    fun insertManyDaysAndReadInList() = runBlocking {
         val days = mutableListOf<DayEntity>()
 
         val simpleDateFormat = SimpleDateFormat("dd-mm-yyyy", Locale.US)
@@ -117,7 +118,7 @@ class DayDaoTests {
 
     @Test
     @Throws(Exception::class)
-    fun insertManyDaysAndReadDatesInList() {
+    fun insertManyDaysAndReadDatesInList() = runBlocking {
         val days = mutableListOf<DayEntity>()
         val dates = mutableListOf<Date>()
 
@@ -146,7 +147,7 @@ class DayDaoTests {
 
     @Test
     @Throws(Exception::class)
-    fun insertOneDayAndUpdateIt() {
+    fun insertOneDayAndUpdateIt() = runBlocking {
         val day = DayEntity(Date(System.currentTimeMillis()), "jumping running sleeping", DayGrade.EIGHT, 1)
 
         dayDao.insert(day)

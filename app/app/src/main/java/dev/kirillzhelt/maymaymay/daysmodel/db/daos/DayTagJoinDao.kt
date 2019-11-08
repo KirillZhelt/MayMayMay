@@ -12,10 +12,10 @@ import dev.kirillzhelt.maymaymay.daysmodel.db.entities.TagEntity
 interface DayTagJoinDao {
 
     @Insert
-    fun insert(dayTagJoin: DayTagJoin)
+    suspend fun insert(dayTagJoin: DayTagJoin)
 
     @Insert
-    fun insert(vararg dayTagJoin: DayTagJoin)
+    suspend fun insert(vararg dayTagJoin: DayTagJoin)
 
     @Query("""
         SELECT * FROM tags
@@ -26,5 +26,5 @@ interface DayTagJoinDao {
     fun getTagsForDay(dayId: Int): LiveData<List<TagEntity>>
 
     @Delete
-    fun delete(dayTagJoin: DayTagJoin)
+    suspend fun delete(dayTagJoin: DayTagJoin)
 }

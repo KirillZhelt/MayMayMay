@@ -9,6 +9,7 @@ import dev.kirillzhelt.maymaymay.daysmodel.db.DayRoomDatabase
 import dev.kirillzhelt.maymaymay.daysmodel.db.daos.TagDao
 import dev.kirillzhelt.maymaymay.daysmodel.db.entities.TagEntity
 import dev.kirillzhelt.maymaymay.utils.observeOnce
+import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -43,7 +44,7 @@ class TagDaoTests {
 
     @Test
     @Throws(Exception::class)
-    fun insertTagAndReadInList() {
+    fun insertTagAndReadInList() = runBlocking {
         val tag = TagEntity("tag", 1)
 
         tagDao.insert(tag)
@@ -55,7 +56,7 @@ class TagDaoTests {
 
     @Test
     @Throws(Exception::class)
-    fun insertManyTagsAndReadInList() {
+    fun insertManyTagsAndReadInList() = runBlocking {
         val tags = mutableListOf<TagEntity>()
 
         for (i in 0..5) {
@@ -73,7 +74,7 @@ class TagDaoTests {
 
     @Test
     @Throws(Exception::class)
-    fun insertTwoTagsWithTheSameString() {
+    fun insertTwoTagsWithTheSameString() = runBlocking {
         val tag1 = TagEntity("tag", 1)
         val tag2 = TagEntity("tag", 2)
 
@@ -88,7 +89,7 @@ class TagDaoTests {
 
     @Test
     @Throws(Exception::class)
-    fun insertManyTagsAndGetTheirIdsByStrings() {
+    fun insertManyTagsAndGetTheirIdsByStrings() = runBlocking {
         val tags = mutableListOf<TagEntity>()
 
         for (i in 0..5) {
@@ -99,6 +100,8 @@ class TagDaoTests {
             tagDao.insert(tag)
         }
 
-        assertEquals(listOf(1, 3), tagDao.getTagIds(listOf("0", "2")))
+        tagDao.getTagIds(listOf("0", "2")).observeOnce {
+            assertEquals(listOf(1, 3), it)
+        }
     }
 }

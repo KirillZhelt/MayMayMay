@@ -11,7 +11,7 @@ import dev.kirillzhelt.maymaymay.daysmodel.db.entities.TagEntity
 interface TagDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insert(tag: TagEntity)
+    suspend fun insert(tag: TagEntity)
 
     @Query("""
         SELECT * 
@@ -24,6 +24,6 @@ interface TagDao {
         FROM tags
         WHERE tags.tag IN (:tags)
     """)
-    fun getTagIds(tags: List<String>): List<Int>
+    fun getTagIds(tags: List<String>): LiveData<List<Int>>
 
 }

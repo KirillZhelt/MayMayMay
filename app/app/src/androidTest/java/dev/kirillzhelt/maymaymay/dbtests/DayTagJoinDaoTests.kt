@@ -14,6 +14,7 @@ import dev.kirillzhelt.maymaymay.daysmodel.db.entities.DayEntity
 import dev.kirillzhelt.maymaymay.daysmodel.db.entities.DayTagJoin
 import dev.kirillzhelt.maymaymay.daysmodel.db.entities.TagEntity
 import dev.kirillzhelt.maymaymay.utils.observeOnce
+import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -55,7 +56,7 @@ class DayTagJoinDaoTests {
 
     @Test
     @Throws(Exception::class)
-    fun insertOneTagForOneDay() {
+    fun insertOneTagForOneDay() = runBlocking {
 
         val day = DayEntity(Date(System.currentTimeMillis()), "day", DayGrade.EIGHT, 1)
         val tag = TagEntity("tag", 1)
@@ -74,7 +75,7 @@ class DayTagJoinDaoTests {
 
     @Test
     @Throws(Exception::class)
-    fun insertManyTagsForOneDay() {
+    fun insertManyTagsForOneDay() = runBlocking {
 
         val day = DayEntity(Date(System.currentTimeMillis()), "day", DayGrade.EIGHT, 1)
 
@@ -100,7 +101,7 @@ class DayTagJoinDaoTests {
 
     @Test
     @Throws(Exception::class)
-    fun insertManyTagsForOneDayAndDeleteOneTag() {
+    fun insertManyTagsForOneDayAndDeleteOneTag() = runBlocking {
         val day = DayEntity(Date(System.currentTimeMillis()), "day", DayGrade.EIGHT, 1)
 
         val tags = mutableListOf<TagEntity>()
