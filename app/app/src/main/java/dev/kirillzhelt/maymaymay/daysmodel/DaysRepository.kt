@@ -16,16 +16,6 @@ import java.util.*
 class DaysRepository(private val dayDao: DayDao, private val tagDao: TagDao,
                      private val dayTagJoinDao: DayTagJoinDao) {
 
-    private val _days = MediatorLiveData<List<Day>>()
-
-    init {
-        _days.addSource(dayDao.getDays()) { dayEntities ->
-            _days.value = dayEntities.map { dayEntity ->
-                Day(dayEntity.date, dayEntity.description, dayEntity.grade, listOf())
-            }
-        }
-    }
-
     suspend fun addNewDay(day: Day) {
         val dayEntity = DayEntity(day.date, day.description, day.grade)
 
@@ -44,7 +34,20 @@ class DaysRepository(private val dayDao: DayDao, private val tagDao: TagDao,
     }
 
     fun getAllDays(): LiveData<List<Day>> {
-        return _days
+        return Transformations.map(dayTagJoinDao.getDaysWithTags()) {
+                daysWithTags ->
+            val groupedByDateDays = daysWithTags.groupBy { it.date }
+
+            groupedByDateDays.values.map { day ->
+                val date = day[0].date
+                val description = day[0].description
+                val grade = day[0].grade
+
+                val tags = day.map { it.tag ?: "" }
+
+                Day(date, description, grade, tags)
+            }
+        }
     }
 
     fun addNewTag(tag: String) {
