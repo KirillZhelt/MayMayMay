@@ -2,6 +2,7 @@ package dev.kirillzhelt.maymaymay.daysmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import dev.kirillzhelt.maymaymay.daysmodel.db.daos.DayDao
 import dev.kirillzhelt.maymaymay.daysmodel.db.daos.DayTagJoinDao
 import dev.kirillzhelt.maymaymay.daysmodel.db.daos.TagDao
@@ -43,8 +44,8 @@ class DaysRepository(private val dayDao: DayDao, private val tagDao: TagDao,
         throw NotImplementedError()
     }
 
-    fun getAllTags(): List<String> {
-        throw NotImplementedError()
+    fun getAllTags(): LiveData<List<String>> {
+        return Transformations.map(tagDao.getTags()) { it.map { it.tag } }
     }
 
 }

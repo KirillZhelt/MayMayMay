@@ -26,7 +26,7 @@ class NewDayViewModel(private val daysRepository: DaysRepository): ViewModel() {
 
     val pickedGrade: LiveData<Int> = _pickedGrade
 
-    private val _tags: MutableLiveData<List<String>>
+    private val _tags: LiveData<List<String>>
     private val _checkedTags = MutableLiveData<List<String>>(emptyList())
 
     val tags = MediatorLiveData<List<Pair<String, Boolean>>>()
@@ -43,7 +43,7 @@ class NewDayViewModel(private val daysRepository: DaysRepository): ViewModel() {
 
         _pickedGrade.value = maxGradeValue.value
 
-        _tags = MutableLiveData(daysRepository.getAllTags())
+        _tags = daysRepository.getAllTags()
 
         tags.addSource(_tags) { newTags ->
             tags.value = newTags.map { newTag ->
