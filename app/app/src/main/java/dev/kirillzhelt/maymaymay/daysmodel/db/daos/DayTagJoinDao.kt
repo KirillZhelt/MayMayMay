@@ -2,6 +2,7 @@ package dev.kirillzhelt.maymaymay.daysmodel.db.daos
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import dev.kirillzhelt.maymaymay.daysmodel.db.entities.DayTagJoin
@@ -24,5 +25,6 @@ interface DayTagJoinDao {
     """)
     fun getTagsForDay(dayId: Int): LiveData<List<TagEntity>>
 
-
+    @Delete
+    fun delete(dayTagJoin: DayTagJoin)
 }
