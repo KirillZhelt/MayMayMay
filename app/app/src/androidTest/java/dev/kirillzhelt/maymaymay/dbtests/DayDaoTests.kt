@@ -160,4 +160,26 @@ class DayDaoTests {
             assertEquals(day, it[0])
         }
     }
+
+    @Test
+    @Throws(Exception::class)
+    fun insertDayAndGetItsIdByDate() = runBlocking {
+        val date = Date(System.currentTimeMillis())
+        val day = DayEntity(date, "day", DayGrade.EIGHT, 1)
+
+        dayDao.insert(day)
+
+        assertEquals(1, dayDao.getDayId(date))
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun insertDayAndGetNullIdByWrongDate() = runBlocking {
+        val date = Date(System.currentTimeMillis())
+        val day = DayEntity(date, "day", DayGrade.EIGHT, 1)
+
+        dayDao.insert(day)
+
+        assertEquals(null, dayDao.getDayId(Date(System.currentTimeMillis())))
+    }
 }

@@ -24,6 +24,6 @@ interface TagDao {
         FROM tags
         WHERE tags.tag IN (:tags)
     """)
-    fun getTagIds(tags: List<String>): LiveData<List<Int>>
+    suspend fun getTagIds(tags: List<String>): List<Int>
 
 }

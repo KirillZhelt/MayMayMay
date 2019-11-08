@@ -17,6 +17,13 @@ interface DayDao {
     """)
     fun getDays(): LiveData<List<DayEntity>>
 
+    @Query("""
+        SELECT days.id
+        FROM days
+        WHERE days.day_date = :date
+    """)
+    suspend fun getDayId(date: Date): Int?
+
     @Update
     suspend fun update(day: DayEntity)
 

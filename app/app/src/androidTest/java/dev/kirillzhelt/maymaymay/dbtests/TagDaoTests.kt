@@ -100,8 +100,6 @@ class TagDaoTests {
             tagDao.insert(tag)
         }
 
-        tagDao.getTagIds(listOf("0", "2")).observeOnce {
-            assertEquals(listOf(1, 3), it)
-        }
+        assertEquals(listOf(1, 3), tagDao.getTagIds(listOf("0", "2")))
     }
 }
