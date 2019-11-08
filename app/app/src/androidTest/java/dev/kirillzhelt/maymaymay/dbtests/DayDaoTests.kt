@@ -182,4 +182,19 @@ class DayDaoTests {
 
         assertEquals(null, dayDao.getDayId(Date(System.currentTimeMillis())))
     }
+
+    @Test
+    @Throws(Exception::class)
+    fun insertOneDayAndDeleteItByDate() = runBlocking {
+        val date = Date(System.currentTimeMillis())
+        val day = DayEntity(date, "day", DayGrade.EIGHT, 1)
+
+        dayDao.insert(day)
+
+        dayDao.deleteByDate(date)
+
+        dayDao.getDays().observeOnce {
+            assertTrue(it.isEmpty())
+        }
+    }
 }

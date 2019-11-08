@@ -31,6 +31,13 @@ interface DayDao {
     suspend fun delete(day: DayEntity)
 
     @Query("""
+        DELETE
+        FROM days
+        WHERE days.day_date = :date
+    """)
+    suspend fun deleteByDate(date: Date)
+
+    @Query("""
         SELECT days.day_date
         FROM days
     """)

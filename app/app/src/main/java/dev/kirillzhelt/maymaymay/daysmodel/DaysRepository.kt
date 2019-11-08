@@ -27,12 +27,10 @@ class DaysRepository(private val dayDao: DayDao, private val tagDao: TagDao,
         }
     }
 
-    fun deleteDay(day: Day): Boolean {
-//        val result = daysList.remove(day)
-//        _days.value = daysList
-//
-//        return result
-        return false
+    fun deleteDay(day: Day) {
+
+
+
     }
 
     fun getAllDays(): LiveData<List<Day>> {
