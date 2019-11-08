@@ -4,14 +4,17 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import dev.kirillzhelt.maymaymay.daysmodel.db.daos.DayDao
 import dev.kirillzhelt.maymaymay.daysmodel.db.daos.DayTagJoinDao
 import dev.kirillzhelt.maymaymay.daysmodel.db.daos.TagDao
 import dev.kirillzhelt.maymaymay.daysmodel.db.entities.DayEntity
 import dev.kirillzhelt.maymaymay.daysmodel.db.entities.DayTagJoin
 import dev.kirillzhelt.maymaymay.daysmodel.db.entities.TagEntity
+import dev.kirillzhelt.maymaymay.daysmodel.db.utils.Converters
 
 @Database(entities = [DayEntity::class, TagEntity::class, DayTagJoin::class], version = 1)
+@TypeConverters(Converters::class)
 abstract class DayRoomDatabase: RoomDatabase() {
 
     abstract fun dayDao(): DayDao

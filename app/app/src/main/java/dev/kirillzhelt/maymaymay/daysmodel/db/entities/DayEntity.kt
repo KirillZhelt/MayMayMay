@@ -13,9 +13,6 @@ import java.util.*
 
 @Entity(tableName = "days", indices = [Index(value = ["day_date"], unique = true)])
 data class DayEntity(
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id")
-    val id: Int = 0,
 
     @ColumnInfo(name = "day_date")
     val date: Date,
@@ -24,5 +21,9 @@ data class DayEntity(
     var description: String,
 
     @ColumnInfo(name = "grade")
-    val grade: DayGrade
+    val grade: DayGrade,
+
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id")
+    var id: Int = 0
 )
