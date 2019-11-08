@@ -15,7 +15,7 @@ interface DayTagJoinDao {
     suspend fun insert(dayTagJoin: DayTagJoin)
 
     @Insert
-    suspend fun insert(vararg dayTagJoin: DayTagJoin)
+    suspend fun insert(dayTagJoin: List<DayTagJoin>)
 
     @Query("""
         SELECT * FROM tags
