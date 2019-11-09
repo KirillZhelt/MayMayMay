@@ -10,6 +10,8 @@ import dev.kirillzhelt.maymaymay.daysmodel.DayGrade
 import dev.kirillzhelt.maymaymay.daysmodel.db.DayRoomDatabase
 import dev.kirillzhelt.maymaymay.daysmodel.db.daos.DayDao
 import dev.kirillzhelt.maymaymay.daysmodel.db.entities.DayEntity
+import dev.kirillzhelt.maymaymay.utils.getCurrentDate
+import dev.kirillzhelt.maymaymay.utils.getDateWithoutTime
 import dev.kirillzhelt.maymaymay.utils.observeOnce
 import kotlinx.coroutines.runBlocking
 import org.junit.After
@@ -50,7 +52,8 @@ class DayDaoTests {
     @Test
     @Throws(Exception::class)
     fun insertOneDayAndReadInList() = runBlocking {
-        val day = DayEntity(Date(System.currentTimeMillis()), "jumping running sleeping", DayGrade.EIGHT, 1)
+        val day = DayEntity(Date(System.currentTimeMillis()).getDateWithoutTime(), "jumping running sleeping",
+            DayGrade.EIGHT, 1)
 
         dayDao.insert(day)
 
@@ -62,7 +65,8 @@ class DayDaoTests {
     @Test
     @Throws(Exception::class)
     fun insertOneDayAndDeleteIt() = runBlocking {
-        val day = DayEntity(Date(System.currentTimeMillis()), "jumping running sleeping", DayGrade.EIGHT, 1)
+        val day = DayEntity(getCurrentDate(),
+            "jumping running sleeping", DayGrade.EIGHT, 1)
 
         dayDao.insert(day)
         dayDao.delete(day)
@@ -75,7 +79,7 @@ class DayDaoTests {
     @Test
     @Throws(Exception::class)
     fun insertDaysWithTheSameDate() = runBlocking {
-        val date = Date(System.currentTimeMillis())
+        val date = getCurrentDate()
 
         val day1 = DayEntity(date, "sleeping", DayGrade.TWO, 1)
         val day2 = DayEntity(date, "sleeping running", DayGrade.THREE, 2)
@@ -97,7 +101,7 @@ class DayDaoTests {
         val simpleDateFormat = SimpleDateFormat("dd-mm-yyyy", Locale.US)
 
         for (i in 0..5) {
-            val date = simpleDateFormat.parse("$i-10-2019")!!
+            val date = simpleDateFormat.parse("$i-10-2019")!!.getDateWithoutTime()
 
             val grade = (0..10).random()
             val dayGrade = DayGrade.fromInt(grade)
@@ -125,7 +129,7 @@ class DayDaoTests {
         val simpleDateFormat = SimpleDateFormat("dd-mm-yyyy", Locale.US)
 
         for (i in 0..5) {
-            val date = simpleDateFormat.parse("$i-10-2019")!!
+            val date = simpleDateFormat.parse("$i-10-2019")!!.getDateWithoutTime()
 
             val grade = (0..10).random()
             val dayGrade = DayGrade.fromInt(grade)
@@ -148,7 +152,8 @@ class DayDaoTests {
     @Test
     @Throws(Exception::class)
     fun insertOneDayAndUpdateIt() = runBlocking {
-        val day = DayEntity(Date(System.currentTimeMillis()), "jumping running sleeping", DayGrade.EIGHT, 1)
+        val day = DayEntity(getCurrentDate(),
+            "jumping running sleeping", DayGrade.EIGHT, 1)
 
         dayDao.insert(day)
 
@@ -164,7 +169,7 @@ class DayDaoTests {
     @Test
     @Throws(Exception::class)
     fun insertDayAndGetItsIdByDate() = runBlocking {
-        val date = Date(System.currentTimeMillis())
+        val date = getCurrentDate()
         val day = DayEntity(date, "day", DayGrade.EIGHT, 1)
 
         dayDao.insert(day)
@@ -175,18 +180,21 @@ class DayDaoTests {
     @Test
     @Throws(Exception::class)
     fun insertDayAndGetNullIdByWrongDate() = runBlocking {
-        val date = Date(System.currentTimeMillis())
+        val date = getCurrentDate()
         val day = DayEntity(date, "day", DayGrade.EIGHT, 1)
 
         dayDao.insert(day)
 
-        assertEquals(null, dayDao.getDayId(Date(System.currentTimeMillis())))
+        val calendar = Calendar.getInstance()
+        calendar.set(Calendar.MONTH, 3)
+
+        assertEquals(null, dayDao.getDayId(calendar.time))
     }
 
     @Test
     @Throws(Exception::class)
     fun insertOneDayAndDeleteItByDate() = runBlocking {
-        val date = Date(System.currentTimeMillis())
+        val date = getCurrentDate()
         val day = DayEntity(date, "day", DayGrade.EIGHT, 1)
 
         dayDao.insert(day)

@@ -1,9 +1,11 @@
 package dev.kirillzhelt.maymaymay.dbtests
 
 import android.content.Context
+import android.util.Log
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
+import androidx.test.espresso.core.internal.deps.guava.collect.Sets
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import dev.kirillzhelt.maymaymay.daysmodel.DayGrade
 import dev.kirillzhelt.maymaymay.daysmodel.db.DayRoomDatabase
@@ -12,7 +14,10 @@ import dev.kirillzhelt.maymaymay.daysmodel.db.daos.DayTagJoinDao
 import dev.kirillzhelt.maymaymay.daysmodel.db.daos.TagDao
 import dev.kirillzhelt.maymaymay.daysmodel.db.entities.DayEntity
 import dev.kirillzhelt.maymaymay.daysmodel.db.entities.DayTagJoin
+import dev.kirillzhelt.maymaymay.daysmodel.db.entities.DayWithTagEntity
 import dev.kirillzhelt.maymaymay.daysmodel.db.entities.TagEntity
+import dev.kirillzhelt.maymaymay.utils.getCurrentDate
+import dev.kirillzhelt.maymaymay.utils.getDateWithoutTime
 import dev.kirillzhelt.maymaymay.utils.observeOnce
 import kotlinx.coroutines.runBlocking
 import org.junit.After
@@ -58,7 +63,7 @@ class DayTagJoinDaoTests {
     @Throws(Exception::class)
     fun insertOneTagForOneDay() = runBlocking {
 
-        val day = DayEntity(Date(System.currentTimeMillis()), "day", DayGrade.EIGHT, 1)
+        val day = DayEntity(getCurrentDate(), "day", DayGrade.EIGHT, 1)
         val tag = TagEntity("tag", 1)
 
         dayDao.insert(day)
@@ -77,7 +82,7 @@ class DayTagJoinDaoTests {
     @Throws(Exception::class)
     fun insertManyTagsForOneDay() = runBlocking {
 
-        val day = DayEntity(Date(System.currentTimeMillis()), "day", DayGrade.EIGHT, 1)
+        val day = DayEntity(getCurrentDate(), "day", DayGrade.EIGHT, 1)
 
         val tags = mutableListOf<TagEntity>()
         for (i in 0..5) {
@@ -102,7 +107,7 @@ class DayTagJoinDaoTests {
     @Test
     @Throws(Exception::class)
     fun insertManyTagsForOneDayAndDeleteOneTag() = runBlocking {
-        val day = DayEntity(Date(System.currentTimeMillis()), "day", DayGrade.EIGHT, 1)
+        val day = DayEntity(getCurrentDate(), "day", DayGrade.EIGHT, 1)
 
         val tags = mutableListOf<TagEntity>()
         for (i in 0..5) {
@@ -123,6 +128,70 @@ class DayTagJoinDaoTests {
 
         dayTagJoinDao.getTagsForDay(1).observeOnce {
             assertEquals(tags, it)
+        }
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun insertOneDayWithTagsAndGetTags() = runBlocking {
+        val day = DayEntity(getCurrentDate(), "day", DayGrade.EIGHT, 1)
+
+        val tags = List(4) {
+            TagEntity("${it + 1}", it + 1)
+        }
+
+        dayDao.insert(day)
+        tags.forEach { tag ->
+            tagDao.insert(tag)
+            dayTagJoinDao.insert(DayTagJoin(day.id, tag.id))
+        }
+
+        val expected = tags.map { tag ->
+            DayWithTagEntity(day.date, day.description, day.grade, tag.tag)
+        }
+
+        dayTagJoinDao.getDaysWithTags().observeOnce {
+            assertEquals(expected, it)
+        }
+    }
+
+    @Test
+    @Throws(Exception::class)
+    fun insertManyDaysWithTagsAndGetTags() = runBlocking {
+        val day1 = DayEntity(getCurrentDate(), "day1", DayGrade.EIGHT, 1)
+
+        val calendar = Calendar.getInstance()
+        calendar.set(Calendar.MONTH, 3)
+        calendar.set(Calendar.HOUR_OF_DAY, 0)
+        calendar.set(Calendar.MINUTE, 0)
+        calendar.set(Calendar.SECOND, 0)
+        calendar.set(Calendar.MILLISECOND, 0)
+
+        val day2 = DayEntity(calendar.time, "day2", DayGrade.ONE, 2)
+
+        val tags = List(4) {
+            TagEntity("${it + 1}", it + 1)
+        }
+
+        dayDao.insert(day1)
+        dayDao.insert(day2)
+        tags.forEach { tag ->
+            tagDao.insert(tag)
+            dayTagJoinDao.insert(DayTagJoin(day1.id, tag.id))
+            dayTagJoinDao.insert(DayTagJoin(day2.id, tag.id))
+        }
+
+        val expected = tags.flatMap { tag ->
+            listOf(DayWithTagEntity(day1.date, day1.description, day1.grade, tag.tag),
+                DayWithTagEntity(day2.date, day2.description, day2.grade, tag.tag))
+        }
+
+        dayTagJoinDao.getDaysWithTags().observeOnce {
+            Log.i("expected", expected.toString())
+            Log.i("expected", it.toString())
+
+            assertEquals(true, expected.containsAll(it))
+            assertEquals(true, it.containsAll(expected))
         }
     }
 }
