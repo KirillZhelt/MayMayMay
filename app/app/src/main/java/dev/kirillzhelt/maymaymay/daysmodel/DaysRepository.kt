@@ -1,73 +1,65 @@
 package dev.kirillzhelt.maymaymay.daysmodel
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
+import dev.kirillzhelt.maymaymay.daysmodel.db.daos.DayDao
+import dev.kirillzhelt.maymaymay.daysmodel.db.daos.DayTagJoinDao
+import dev.kirillzhelt.maymaymay.daysmodel.db.daos.TagDao
+import dev.kirillzhelt.maymaymay.daysmodel.db.entities.DayEntity
+import dev.kirillzhelt.maymaymay.daysmodel.db.entities.DayTagJoin
+import dev.kirillzhelt.maymaymay.daysmodel.db.entities.TagEntity
 import java.text.SimpleDateFormat
 import java.util.*
 
-class DaysRepository {
+class DaysRepository(private val dayDao: DayDao, private val tagDao: TagDao,
+                     private val dayTagJoinDao: DayTagJoinDao) {
 
-    private val tags: List<String> = listOf("Good sleep", "Friends", "Sport", "Education", "Cinema",
-        "Restaurant", "Birthday")
+    suspend fun addNewDay(day: Day) {
+        val dayEntity = DayEntity(day.date, day.description, day.grade)
 
-    private val daysList: MutableList<Day> = mutableListOf()
+        dayDao.insert(dayEntity)
+        val dayId = dayDao.getDayId(day.date)
 
-    private val _days: MutableLiveData<List<Day>> = MutableLiveData()
-    private val days: LiveData<List<Day>>
-        get() {
-            return _days
+        if (dayId != null && day.tags.isNotEmpty()) {
+            val dayTagJoins = tagDao.getTagIds(day.tags).map { tagId -> DayTagJoin(dayId, tagId) }
+
+            dayTagJoinDao.insert(dayTagJoins)
         }
-
-    init {
-        val simpleDateFormat = SimpleDateFormat("dd-mm-yyyy", Locale.US)
-
-        for (i in 0..5) {
-            val date = simpleDateFormat.parse("$i-10-2019")!!
-
-            val firstTagIndex = (0..tags.size).random()
-            val secondTagIndex = (firstTagIndex..tags.size).random()
-
-            val grade = (0..10).random()
-            val dayGrade = DayGrade.values().find { grade == it.grade } !!
-
-            daysList.add(Day(date, "Lorem ipsum dolor sit amet, consectetur " +
-                    "adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore " +
-                    "magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris " +
-                    "nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate " +
-                    "velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, " +
-                    "sunt in culpa qui officia deserunt mollit anim id est laborum.",
-                tags.subList(firstTagIndex, secondTagIndex).toMutableList(), dayGrade))
-        }
-
-        _days.value = daysList
     }
 
-    fun addNewDay(day: Day) {
-        daysList.add(day)
-        _days.value = daysList
-    }
-
-    fun deleteDay(day: Day): Boolean {
-        val result = daysList.remove(day)
-        _days.value = daysList
-
-        return result
+    suspend fun deleteDay(day: Day) {
+        dayDao.deleteByDate(day.date)
     }
 
     fun getAllDays(): LiveData<List<Day>> {
-        return days
+        return Transformations.map(dayTagJoinDao.getDaysWithTags()) {
+                daysWithTags ->
+            val groupedByDateDays = daysWithTags.groupBy { it.date }
+
+            groupedByDateDays.values.map { day ->
+                val date = day[0].date
+                val description = day[0].description
+                val grade = day[0].grade
+
+                val tags = day.map { it.tag ?: "" }
+
+                Day(date, description, grade, tags)
+            }
+        }
     }
 
-//    fun addNewTag(tag: String) {
-//        tags.add(tag)
-//    }
-//
-//    fun deleteTag(tag: String): Boolean {
-//        return tags.remove(tag)
-//    }
+    fun addNewTag(tag: String) {
+        throw NotImplementedError()
+    }
 
-    fun getAllTags(): List<String> {
-        return tags
+    fun deleteTag(tag: String) {
+        throw NotImplementedError()
+    }
+
+    fun getAllTags(): LiveData<List<String>> {
+        return Transformations.map(tagDao.getTags()) { it.map { it.tag } }
     }
 
 }

@@ -6,6 +6,9 @@ import dev.kirillzhelt.maymaymay.daysmodel.Day
 import dev.kirillzhelt.maymaymay.daysmodel.DayGrade
 import dev.kirillzhelt.maymaymay.daysmodel.DaysRepository
 import dev.kirillzhelt.maymaymay.daysmodel.exceptions.NoGradesException
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -26,7 +29,7 @@ class NewDayViewModel(private val daysRepository: DaysRepository): ViewModel() {
 
     val pickedGrade: LiveData<Int> = _pickedGrade
 
-    private val _tags: MutableLiveData<List<String>>
+    private val _tags: LiveData<List<String>>
     private val _checkedTags = MutableLiveData<List<String>>(emptyList())
 
     val tags = MediatorLiveData<List<Pair<String, Boolean>>>()
@@ -43,7 +46,7 @@ class NewDayViewModel(private val daysRepository: DaysRepository): ViewModel() {
 
         _pickedGrade.value = maxGradeValue.value
 
-        _tags = MutableLiveData(daysRepository.getAllTags())
+        _tags = daysRepository.getAllTags()
 
         tags.addSource(_tags) { newTags ->
             tags.value = newTags.map { newTag ->
@@ -56,7 +59,7 @@ class NewDayViewModel(private val daysRepository: DaysRepository): ViewModel() {
         tags.addSource(_checkedTags) { newCheckedTags ->
             tags.value = tags.value?.map { tag ->
                 Pair(tag.first, newCheckedTags.contains(tag.first))
-            }
+            } ?: emptyList()
 
             Log.i("Tags", "mediator: ${tags.value}")
         }
@@ -87,10 +90,11 @@ class NewDayViewModel(private val daysRepository: DaysRepository): ViewModel() {
     fun addNewDay() {
         Log.i("Add", "Day added")
 
-        val day = Day(_pickedDate.value!!, _description.value!!, _checkedTags.value!!.toMutableList(),
-            DayGrade.values().find { _pickedGrade.value!! == it.grade } !!)
+        val day = Day(_pickedDate.value!!, _description.value!!, DayGrade.fromInt(_pickedGrade.value!!),
+            _checkedTags.value!!)
 
-        daysRepository.addNewDay(day)
-
+        viewModelScope.launch(Dispatchers.IO) {
+            daysRepository.addNewDay(day)
+        }
     }
 }
