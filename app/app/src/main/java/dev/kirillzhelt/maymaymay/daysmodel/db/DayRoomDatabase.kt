@@ -5,6 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import androidx.sqlite.db.SupportSQLiteDatabase
 import dev.kirillzhelt.maymaymay.daysmodel.db.daos.DayDao
 import dev.kirillzhelt.maymaymay.daysmodel.db.daos.DayTagJoinDao
 import dev.kirillzhelt.maymaymay.daysmodel.db.daos.TagDao
@@ -12,6 +13,10 @@ import dev.kirillzhelt.maymaymay.daysmodel.db.entities.DayEntity
 import dev.kirillzhelt.maymaymay.daysmodel.db.entities.DayTagJoin
 import dev.kirillzhelt.maymaymay.daysmodel.db.entities.TagEntity
 import dev.kirillzhelt.maymaymay.daysmodel.db.utils.Converters
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @Database(entities = [DayEntity::class, TagEntity::class, DayTagJoin::class], version = 1)
 @TypeConverters(Converters::class)
@@ -43,7 +48,22 @@ abstract class DayRoomDatabase: RoomDatabase() {
                         context.applicationContext,
                         DayRoomDatabase::class.java,
                         "day_database"
-                        ).build()
+                        )
+                        .addCallback(object: Callback() {
+                            override fun onCreate(db: SupportSQLiteDatabase) {
+                                super.onCreate(db)
+
+                                GlobalScope.launch(Dispatchers.Main) {
+                                    val tags = listOf(TagEntity("Good sleep"), TagEntity("Studying"),
+                                        TagEntity("Sport"))
+
+                                    val tagDao = getDatabase(context).tagDao()
+
+                                    tags.forEach { tagDao.insert(it) }
+                                }
+                            }
+                        })
+                        .build()
 
                     INSTANCE = i2
                     i2
