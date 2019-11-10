@@ -34,6 +34,7 @@ class NewDayFragment: Fragment() {
 
     private lateinit var tagsChipGroup: ChipGroup
     private lateinit var descriptionEditText: EditText
+    private lateinit var datePickerDialog: DatePickerDialog
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,7 +44,9 @@ class NewDayFragment: Fragment() {
         val inflatedView = inflater.inflate(R.layout.fragment_new_day, container, false)
 
         val chooseDateButton: Button = inflatedView.findViewById(R.id.fragment_new_day_choose_date_btn)
-        chooseDateButton.setOnClickListener(this::showDatePickerDialog)
+        chooseDateButton.setOnClickListener {
+            datePickerDialog.show(fragmentManager!!, "DatePickerDialog")
+        }
 
         val dateTextView: TextView = inflatedView.findViewById(R.id.fragment_new_day_date_tv)
         newDayViewModel.formattedPickedDate.observe(this, Observer { formattedDate ->
@@ -109,6 +112,22 @@ class NewDayFragment: Fragment() {
             descriptionEditText.setText(description, TextView.BufferType.EDITABLE)
         })
 
+        datePickerDialog = DatePickerDialog.newInstance { _, year, monthOfYear, dayOfMonth ->
+            newDayViewModel.onDatePicked(year, monthOfYear, dayOfMonth)
+        }
+
+        datePickerDialog.isThemeDark = false
+        datePickerDialog.showYearPickerFirst(false)
+        datePickerDialog.setTitle(getString(R.string.date_picker_title))
+        datePickerDialog.setOkColor(Color.WHITE)
+        datePickerDialog.setCancelColor(Color.WHITE)
+
+        datePickerDialog.maxDate = Calendar.getInstance()
+
+        newDayViewModel.dates.observe(this, Observer { dates ->
+            datePickerDialog.disabledDays = dates.toTypedArray()
+        })
+
         return inflatedView
     }
 
@@ -123,21 +142,5 @@ class NewDayFragment: Fragment() {
             saveDescription(descriptionEditText.text.toString())
             saveCheckedTags(tagsChipGroup.findCheckedChipTexts())
         }
-    }
-
-    private fun showDatePickerDialog(view: View) {
-        val datePickerDialog = DatePickerDialog.newInstance { _, year, monthOfYear, dayOfMonth ->
-            newDayViewModel.onDatePicked(year, monthOfYear, dayOfMonth)
-        }
-
-        datePickerDialog.isThemeDark = false
-        datePickerDialog.showYearPickerFirst(false)
-        datePickerDialog.setTitle(getString(R.string.date_picker_title))
-        datePickerDialog.setOkColor(Color.WHITE)
-        datePickerDialog.setCancelColor(Color.WHITE)
-
-        datePickerDialog.maxDate = Calendar.getInstance()
-
-        datePickerDialog.show(fragmentManager!!, "DatePickerDialog")
     }
 }

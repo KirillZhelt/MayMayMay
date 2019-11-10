@@ -38,6 +38,15 @@ class NewDayViewModel(private val daysRepository: DaysRepository): ViewModel() {
 
     val description: LiveData<String> = _description
 
+    val dates: LiveData<List<Calendar>> = Transformations.map(daysRepository.getAllDates()) { dates ->
+        dates.map {
+            val calendar = Calendar.getInstance()
+            calendar.time = it
+
+            calendar
+        }
+    }
+
     init {
         val gradeValues = DayGrade.values().map { dayGrade -> dayGrade.grade }
 
