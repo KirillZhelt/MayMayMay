@@ -23,6 +23,7 @@ import dev.kirillzhelt.maymaymay.MainApplication
 import dev.kirillzhelt.maymaymay.R
 import dev.kirillzhelt.maymaymay.utils.findCheckedChipTexts
 import kotlinx.android.synthetic.main.fragment_new_day.*
+import java.util.*
 
 /**
  * A simple [Fragment] subclass.
@@ -134,6 +135,8 @@ class NewDayFragment: Fragment() {
         datePickerDialog.setTitle(getString(R.string.date_picker_title))
         datePickerDialog.setOkColor(Color.WHITE)
         datePickerDialog.setCancelColor(Color.WHITE)
+
+        datePickerDialog.maxDate = Calendar.getInstance()
 
         datePickerDialog.show(fragmentManager!!, "DatePickerDialog")
     }
