@@ -26,6 +26,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
@@ -60,6 +65,8 @@ dependencies {
 
     // MaterialDatePicker
     implementation 'com.google.android.material:material:1.2.0-alpha01'
+
+    implementation 'com.wdullaer:materialdatetimepicker:4.2.3'
 
     // Room
     implementation "androidx.room:room-runtime:$room_version"

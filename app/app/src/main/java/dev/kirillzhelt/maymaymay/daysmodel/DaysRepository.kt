@@ -50,6 +50,10 @@ class DaysRepository(private val dayDao: DayDao, private val tagDao: TagDao,
         }
     }
 
+    fun getAllDates(): LiveData<List<Date>> {
+        return dayDao.getDates()
+    }
+
     fun addNewTag(tag: String) {
         throw NotImplementedError()
     }

@@ -38,6 +38,15 @@ class NewDayViewModel(private val daysRepository: DaysRepository): ViewModel() {
 
     val description: LiveData<String> = _description
 
+    val dates: LiveData<List<Calendar>> = Transformations.map(daysRepository.getAllDates()) { dates ->
+        dates.map {
+            val calendar = Calendar.getInstance()
+            calendar.time = it
+
+            calendar
+        }
+    }
+
     init {
         val gradeValues = DayGrade.values().map { dayGrade -> dayGrade.grade }
 
@@ -65,8 +74,14 @@ class NewDayViewModel(private val daysRepository: DaysRepository): ViewModel() {
         }
     }
 
-    fun onDatePicked(selection: Long) {
-        _pickedDate.value = Date(selection)
+    fun onDatePicked(year: Int, month: Int, day: Int) {
+
+        val calendar = Calendar.getInstance()
+        calendar.set(Calendar.YEAR, year)
+        calendar.set(Calendar.MONTH, month)
+        calendar.set(Calendar.DAY_OF_MONTH, day)
+
+        _pickedDate.value = calendar.time
 
         Log.i("Date picked", _pickedDate.value.toString())
     }

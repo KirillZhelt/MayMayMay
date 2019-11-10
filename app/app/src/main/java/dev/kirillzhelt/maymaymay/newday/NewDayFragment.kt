@@ -1,5 +1,6 @@
 package dev.kirillzhelt.maymaymay.newday
 
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -17,11 +18,12 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipDrawable
 import com.google.android.material.chip.ChipGroup
-import com.google.android.material.datepicker.MaterialDatePicker
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import dev.kirillzhelt.maymaymay.MainApplication
 import dev.kirillzhelt.maymaymay.R
 import dev.kirillzhelt.maymaymay.utils.findCheckedChipTexts
 import kotlinx.android.synthetic.main.fragment_new_day.*
+import java.util.*
 
 /**
  * A simple [Fragment] subclass.
@@ -32,6 +34,7 @@ class NewDayFragment: Fragment() {
 
     private lateinit var tagsChipGroup: ChipGroup
     private lateinit var descriptionEditText: EditText
+    private lateinit var datePickerDialog: DatePickerDialog
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,7 +44,9 @@ class NewDayFragment: Fragment() {
         val inflatedView = inflater.inflate(R.layout.fragment_new_day, container, false)
 
         val chooseDateButton: Button = inflatedView.findViewById(R.id.fragment_new_day_choose_date_btn)
-        chooseDateButton.setOnClickListener(this::showDatePickerDialog)
+        chooseDateButton.setOnClickListener {
+            datePickerDialog.show(fragmentManager!!, "DatePickerDialog")
+        }
 
         val dateTextView: TextView = inflatedView.findViewById(R.id.fragment_new_day_date_tv)
         newDayViewModel.formattedPickedDate.observe(this, Observer { formattedDate ->
@@ -107,6 +112,22 @@ class NewDayFragment: Fragment() {
             descriptionEditText.setText(description, TextView.BufferType.EDITABLE)
         })
 
+        datePickerDialog = DatePickerDialog.newInstance { _, year, monthOfYear, dayOfMonth ->
+            newDayViewModel.onDatePicked(year, monthOfYear, dayOfMonth)
+        }
+
+        datePickerDialog.isThemeDark = false
+        datePickerDialog.showYearPickerFirst(false)
+        datePickerDialog.setTitle(getString(R.string.date_picker_title))
+        datePickerDialog.setOkColor(Color.WHITE)
+        datePickerDialog.setCancelColor(Color.WHITE)
+
+        datePickerDialog.maxDate = Calendar.getInstance()
+
+        newDayViewModel.dates.observe(this, Observer { dates ->
+            datePickerDialog.disabledDays = dates.toTypedArray()
+        })
+
         return inflatedView
     }
 
@@ -121,15 +142,5 @@ class NewDayFragment: Fragment() {
             saveDescription(descriptionEditText.text.toString())
             saveCheckedTags(tagsChipGroup.findCheckedChipTexts())
         }
-    }
-
-    private fun showDatePickerDialog(view: View) {
-        val datePickerBuilder: MaterialDatePicker.Builder<Long> = MaterialDatePicker.Builder.datePicker()
-        datePickerBuilder.setTitleText(R.string.date_picker_title)
-
-        val picker = datePickerBuilder.build()
-        picker.addOnPositiveButtonClickListener(newDayViewModel::onDatePicked)
-
-        picker.show(fragmentManager!!, "datePicker")
     }
 }
