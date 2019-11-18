@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import dev.kirillzhelt.maymaymay.MainApplication
@@ -36,6 +37,12 @@ class DaysListFragment : Fragment() {
         }
 
         daysListRecyclerView.adapter = daysListAdapter
+
+        val itemTouchHelper = ItemTouchHelper(SwipeToDeleteCallback { day ->
+            daysListViewModel.deleteDay(day)
+        })
+
+        itemTouchHelper.attachToRecyclerView(daysListRecyclerView)
 
         daysListViewModel.days.observe(this, Observer { days ->
             daysListAdapter.days = days
