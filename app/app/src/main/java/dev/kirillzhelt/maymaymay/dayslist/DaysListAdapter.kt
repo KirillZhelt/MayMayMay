@@ -10,7 +10,7 @@ import dev.kirillzhelt.maymaymay.daysmodel.Day
 import java.text.SimpleDateFormat
 import java.util.*
 
-class DaysListAdapter: RecyclerView.Adapter<DaysListAdapter.DaysListViewHolder>() {
+class DaysListAdapter(private val listener: (day: Day) -> Unit): RecyclerView.Adapter<DaysListAdapter.DaysListViewHolder>() {
 
     var days: List<Day> = listOf()
         set(value) {
@@ -19,7 +19,8 @@ class DaysListAdapter: RecyclerView.Adapter<DaysListAdapter.DaysListViewHolder>(
         }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DaysListViewHolder {
-        return DaysListViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.rv_item_day, parent, false))
+        return DaysListViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.rv_item_day, parent, false),
+            listener)
     }
 
     override fun getItemCount(): Int {
@@ -30,13 +31,23 @@ class DaysListAdapter: RecyclerView.Adapter<DaysListAdapter.DaysListViewHolder>(
         holder.bind(days[position])
     }
 
-    class DaysListViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+    class DaysListViewHolder(itemView: View, listener: (day: Day) -> Unit): RecyclerView.ViewHolder(itemView) {
 
         private val dateTextView: TextView = itemView.findViewById(R.id.rv_item_day_date_tv)
         private val descriptionTextView: TextView = itemView.findViewById(R.id.rv_item_day_description_tv)
         private val gradeTextView: TextView = itemView.findViewById(R.id.rv_item_day_grade_tv)
 
+        private var currentDay: Day? = null
+
+        init {
+            itemView.setOnClickListener{
+                currentDay?.let { day -> listener(day) }
+            }
+        }
+
         fun bind(day: Day) {
+            currentDay = day
+
             val dateFormat = SimpleDateFormat("EEE, MMM d, yyyy", Locale.US)
 
             dateTextView.text = dateFormat.format(day.date)

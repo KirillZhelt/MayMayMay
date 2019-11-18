@@ -1,5 +1,6 @@
 package dev.kirillzhelt.maymaymay.daysmodel
 
+import java.io.Serializable
 import java.util.*
 
 data class Day(
@@ -7,4 +8,4 @@ data class Day(
     var description: String,
     val grade: DayGrade,
     val tags: List<String>
-)
+): Serializable
