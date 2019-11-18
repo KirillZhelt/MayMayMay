@@ -37,7 +37,7 @@ class DaysListAdapter(private val listener: (day: Day) -> Unit): RecyclerView.Ad
         private val descriptionTextView: TextView = itemView.findViewById(R.id.rv_item_day_description_tv)
         private val gradeTextView: TextView = itemView.findViewById(R.id.rv_item_day_grade_tv)
 
-        private var currentDay: Day? = null
+        var currentDay: Day? = null
 
         init {
             itemView.setOnClickListener{
