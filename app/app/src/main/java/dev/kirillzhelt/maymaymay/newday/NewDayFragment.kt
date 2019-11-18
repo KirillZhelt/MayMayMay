@@ -45,9 +45,17 @@ class NewDayFragment: Fragment() {
             datePickerDialog.show(fragmentManager!!, "DatePickerDialog")
         }
 
+        val addDayButton: Button = inflatedView.findViewById(R.id.fragment_day_info_grade_title_tv)
+
         val dateTextView: TextView = inflatedView.findViewById(R.id.fragment_new_day_date_tv)
         newDayViewModel.formattedPickedDate.observe(this, Observer { formattedDate ->
-            dateTextView.text = formattedDate
+            if (formattedDate != null) {
+                dateTextView.text = formattedDate
+                addDayButton.isEnabled = true
+            } else {
+                dateTextView.text = getString(R.string.date_not_chosen)
+                addDayButton.isEnabled = false
+            }
         })
 
         val gradeNumberPicker: NumberPicker = inflatedView.findViewById(R.id.fragment_new_day_grade_np)
@@ -86,7 +94,6 @@ class NewDayFragment: Fragment() {
             }
         })
 
-        val addDayButton: Button = inflatedView.findViewById(R.id.fragment_day_info_grade_title_tv)
         addDayButton.setOnClickListener { view ->
             // TODO: do not allow to add days with
             //  the same date as already exists (check edittext text, and

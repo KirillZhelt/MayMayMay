@@ -14,12 +14,17 @@ import java.util.*
 
 class NewDayViewModel(private val daysRepository: DaysRepository): ViewModel() {
 
-    private val _pickedDate = MutableLiveData<Date>(Date(System.currentTimeMillis()))
+    private val _pickedDate = MutableLiveData<Date?>(null)
 
-    val formattedPickedDate: LiveData<String> = Transformations.map(_pickedDate) { date ->
-        val dateFormat = SimpleDateFormat("MMMM dd, yyyy", Locale.US)
+    val formattedPickedDate: LiveData<String?> = Transformations.map(_pickedDate) { date ->
+        if (date == null) {
+            null
+        } else {
+            val dateFormat = SimpleDateFormat("MMMM dd, yyyy", Locale.US)
 
-        dateFormat.format(date)
+            dateFormat.format(date)
+        }
+
     }
 
     val minGradeValue: LiveData<Int>
