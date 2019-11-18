@@ -2,7 +2,6 @@ package dev.kirillzhelt.maymaymay.newday
 
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +10,6 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.NumberPicker
 import android.widget.TextView
-import androidx.core.view.marginBottom
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -22,7 +20,6 @@ import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import dev.kirillzhelt.maymaymay.MainApplication
 import dev.kirillzhelt.maymaymay.R
 import dev.kirillzhelt.maymaymay.utils.findCheckedChipTexts
-import kotlinx.android.synthetic.main.fragment_new_day.*
 import java.util.*
 
 /**
@@ -70,7 +67,7 @@ class NewDayFragment: Fragment() {
             newDayViewModel.onGradePicked(newValue)
         }
 
-        tagsChipGroup = inflatedView.findViewById(R.id.fragment_new_day_tags_cg)
+        tagsChipGroup = inflatedView.findViewById(R.id.fragment_day_info_tags_cg)
 
         newDayViewModel.tags.observe(this, Observer { tags ->
             tagsChipGroup.removeAllViews()
@@ -89,7 +86,7 @@ class NewDayFragment: Fragment() {
             }
         })
 
-        val addDayButton: Button = inflatedView.findViewById(R.id.fragment_new_day_add_btn)
+        val addDayButton: Button = inflatedView.findViewById(R.id.fragment_day_info_grade_title_tv)
         addDayButton.setOnClickListener { view ->
             // TODO: do not allow to add days with
             //  the same date as already exists (check edittext text, and

@@ -46,5 +46,8 @@
         <action
             android:id="@+id/action_dayInfoFragment_to_daysListFragment"
             app:destination="@id/daysListFragment" />
+        <argument
+            android:name="day"
+            app:argType="dev.kirillzhelt.maymaymay.daysmodel.Day" />
     </fragment>
 </navigation>
