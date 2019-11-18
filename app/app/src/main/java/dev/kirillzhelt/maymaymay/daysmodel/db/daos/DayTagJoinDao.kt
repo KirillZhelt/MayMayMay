@@ -8,6 +8,7 @@ import androidx.room.Query
 import dev.kirillzhelt.maymaymay.daysmodel.db.entities.DayTagJoin
 import dev.kirillzhelt.maymaymay.daysmodel.db.entities.DayWithTagEntity
 import dev.kirillzhelt.maymaymay.daysmodel.db.entities.TagEntity
+import java.util.*
 
 @Dao
 interface DayTagJoinDao {
@@ -43,9 +44,9 @@ interface DayTagJoinDao {
         ON days.id = day_tag_join.day_id
         LEFT JOIN tags
         ON day_tag_join.tag_id = tags.id
-        WHERE days.id = :dayId
+        WHERE days.day_date = :dayDate
     """)
-    fun getDayWithTagsById(dayId: Int): LiveData<DayWithTagEntity>
+    fun getDayWithTagsByDate(dayDate: Date): LiveData<List<DayWithTagEntity>>
 
     @Delete
     suspend fun delete(dayTagJoin: DayTagJoin)

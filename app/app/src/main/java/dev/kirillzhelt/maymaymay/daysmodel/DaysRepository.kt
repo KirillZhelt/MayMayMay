@@ -9,6 +9,7 @@ import dev.kirillzhelt.maymaymay.daysmodel.db.daos.DayTagJoinDao
 import dev.kirillzhelt.maymaymay.daysmodel.db.daos.TagDao
 import dev.kirillzhelt.maymaymay.daysmodel.db.entities.DayEntity
 import dev.kirillzhelt.maymaymay.daysmodel.db.entities.DayTagJoin
+import dev.kirillzhelt.maymaymay.daysmodel.db.entities.DayWithTagEntity
 import dev.kirillzhelt.maymaymay.daysmodel.db.entities.TagEntity
 import java.text.SimpleDateFormat
 import java.util.*
@@ -47,6 +48,12 @@ class DaysRepository(private val dayDao: DayDao, private val tagDao: TagDao,
 
                 Day(date, description, grade, tags)
             }
+        }
+    }
+
+    fun getDay(date: Date): LiveData<Day> {
+        return Transformations.map(dayTagJoinDao.getDayWithTagsByDate(date)) { daysWithTags ->
+            Day(daysWithTags[0].date, daysWithTags[0].description, daysWithTags[0].grade, daysWithTags.mapNotNull { it.tag })
         }
     }
 

@@ -1,6 +1,6 @@
 package dev.kirillzhelt.maymaymay.dayinfo
 
-
+import androidx.lifecycle.Observer
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -14,6 +14,7 @@ import com.google.android.material.chip.ChipDrawable
 import com.google.android.material.chip.ChipGroup
 import dev.kirillzhelt.maymaymay.MainApplication
 import dev.kirillzhelt.maymaymay.R
+import dev.kirillzhelt.maymaymay.daysmodel.Day
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -22,11 +23,11 @@ import java.util.*
  */
 class DayInfoFragment : Fragment() {
 
-    private val dayInfoViewModel: DayInfoViewModel by viewModels {
-        DayInfoViewModelFactory(MainApplication.daysRepository)
-    }
-
     private val args: DayInfoFragmentArgs by navArgs()
+
+    private val dayInfoViewModel: DayInfoViewModel by viewModels {
+        DayInfoViewModelFactory(args.day, MainApplication.daysRepository)
+    }
 
     private lateinit var dateTextView: TextView
     private lateinit var descriptionTextView: TextView
@@ -45,28 +46,35 @@ class DayInfoFragment : Fragment() {
         tagsChipGroup = inflatedView.findViewById(R.id.fragment_day_info_tags_cg)
         gradeTextView = inflatedView.findViewById(R.id.day_info_fragment_grade_tv)
 
-        args.day.let { day ->
-            val dateFormat = SimpleDateFormat("MMMM dd, yyyy", Locale.US)
-            dateTextView.text = dateFormat.format(day.date)
+        bind(args.day)
 
-            descriptionTextView.text = day.description
-
-            day.tags.forEach { tagText ->
-                val chip = Chip(requireContext()).apply {
-                    text = tagText
-                }
-
-                val chipDrawable = ChipDrawable.createFromAttributes(requireContext(), null, 0,
-                    R.style.Widget_MaterialComponents_Chip_Filter)
-                chip.setChipDrawable(chipDrawable)
-                chip.isCheckable = false
-
-                tagsChipGroup.addView(chip)
-            }
-
-            gradeTextView.text = day.grade.grade.toString()
-        }
+        dayInfoViewModel.day.observe(this, Observer { day ->
+            bind(day)
+        })
 
         return inflatedView
+    }
+
+    private fun bind(day: Day) {
+        val dateFormat = SimpleDateFormat("MMMM dd, yyyy", Locale.US)
+        dateTextView.text = dateFormat.format(day.date)
+
+        descriptionTextView.text = day.description
+
+        tagsChipGroup.removeAllViews()
+        day.tags.forEach { tagText ->
+            val chip = Chip(requireContext()).apply {
+                text = tagText
+            }
+
+            val chipDrawable = ChipDrawable.createFromAttributes(requireContext(), null, 0,
+                R.style.Widget_MaterialComponents_Chip_Filter)
+            chip.setChipDrawable(chipDrawable)
+            chip.isCheckable = false
+
+            tagsChipGroup.addView(chip)
+        }
+
+        gradeTextView.text = day.grade.grade.toString()
     }
 }
