@@ -36,6 +36,17 @@ interface DayTagJoinDao {
     """)
     fun getDaysWithTags(): LiveData<List<DayWithTagEntity>>
 
+    @Query("""
+        SELECT days.day_date, days.description, days.grade, tags.tag
+        FROM days 
+        LEFT JOIN day_tag_join 
+        ON days.id = day_tag_join.day_id
+        LEFT JOIN tags
+        ON day_tag_join.tag_id = tags.id
+        WHERE days.id = :dayId
+    """)
+    fun getDayWithTagsById(dayId: Int): LiveData<DayWithTagEntity>
+
     @Delete
     suspend fun delete(dayTagJoin: DayTagJoin)
 }
