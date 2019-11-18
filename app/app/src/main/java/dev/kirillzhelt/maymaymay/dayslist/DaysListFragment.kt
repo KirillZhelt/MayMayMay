@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
@@ -38,7 +39,8 @@ class DaysListFragment : Fragment() {
 
         daysListRecyclerView.adapter = daysListAdapter
 
-        val itemTouchHelper = ItemTouchHelper(SwipeToDeleteCallback { day ->
+        val itemTouchHelper = ItemTouchHelper(
+            SwipeToDeleteCallback(ContextCompat.getDrawable(requireContext(), R.drawable.ic_delete_black_24dp)!!) { day ->
             daysListViewModel.deleteDay(day)
         })
 
