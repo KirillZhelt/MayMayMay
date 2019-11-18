@@ -79,7 +79,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textView" />
 
         <com.google.android.material.chip.ChipGroup
-            android:id="@+id/fragment_new_day_tags_cg"
+            android:id="@+id/fragment_day_info_tags_cg"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -95,7 +95,7 @@
         </com.google.android.material.chip.ChipGroup>
 
         <Button
-            android:id="@+id/fragment_new_day_add_btn"
+            android:id="@+id/fragment_day_info_grade_title_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -104,7 +104,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/fragment_new_day_tags_cg" />
+            app:layout_constraintTop_toBottomOf="@+id/fragment_day_info_tags_cg" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

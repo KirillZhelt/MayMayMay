@@ -17,4 +17,6 @@
     <string name="grade_picker_title">Estimate you day</string>
     <string name="add_day_button_title">Add day</string>
     <string name="description_empty_error">You should not leave description empty</string>
+    <string name="description_title">You did</string>
+    <string name="grade_title">Estimated as</string>
 </resources>
