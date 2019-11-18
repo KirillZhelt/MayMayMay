@@ -39,6 +39,9 @@ class SwipeToDeleteCallback(private val icon: Drawable,
             val iconRight = itemView.right - iconMargin
 
             icon.setBounds(iconLeft, iconTop, iconRight, iconBottom)
+        } else {
+            background.setBounds(0, 0, 0, 0)
+            icon.setBounds(0, 0, 0, 0)
         }
 
         background.draw(c)
