@@ -17,7 +17,7 @@ import com.google.android.material.chip.ChipDrawable
 import com.google.android.material.chip.ChipGroup
 import dev.kirillzhelt.maymaymay.MainApplication
 import dev.kirillzhelt.maymaymay.R
-import dev.kirillzhelt.maymaymay.daysmodel.Day
+import dev.kirillzhelt.maymaymay.utils.findCheckedChipTexts
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -29,10 +29,11 @@ class EditDayFragment : Fragment() {
     private val args: EditDayFragmentArgs by navArgs()
 
     private val editDayViewModel: EditDayViewModel by viewModels {
-        EditDayViewModelFactory(args.day.date, MainApplication.daysRepository)
+        EditDayViewModelFactory(args.day, MainApplication.daysRepository)
     }
 
     private lateinit var descriptionEditText: EditText
+    private lateinit var tagsChipGroup: ChipGroup
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,11 +43,11 @@ class EditDayFragment : Fragment() {
         val inflatedView = inflater.inflate(R.layout.fragment_edit_day, container, false)
 
         val dateTextView: TextView = inflatedView.findViewById(R.id.fragment_edit_day_date_tv)
-        val tagsChipGroup: ChipGroup = inflatedView.findViewById(R.id.fragment_edit_day_tags_cg)
         val gradeTextView: TextView = inflatedView.findViewById(R.id.fragment_edit_day_grade_title_tv)
         val saveDayButton: Button = inflatedView.findViewById(R.id.fragment_edit_day_save_day_btn)
 
         descriptionEditText = inflatedView.findViewById(R.id.fragment_edit_day_description_et)
+        tagsChipGroup = inflatedView.findViewById(R.id.fragment_edit_day_tags_cg)
 
         val day = args.day
 
@@ -55,19 +56,22 @@ class EditDayFragment : Fragment() {
 
         descriptionEditText.setText(day.description)
 
-        tagsChipGroup.removeAllViews()
-        day.tags.forEach { tagText ->
-            val chip = Chip(requireContext()).apply {
-                text = tagText
+        editDayViewModel.tags.observe(this, Observer { tags ->
+            tagsChipGroup.removeAllViews()
+
+            tags.forEach { tag ->
+                val chip = Chip(requireContext()).apply {
+                    text = tag.first
+                }
+
+                val chipDrawable = ChipDrawable.createFromAttributes(requireContext(),
+                    null, 0, R.style.Widget_MaterialComponents_Chip_Filter)
+                chip.setChipDrawable(chipDrawable)
+                chip.isChecked = tag.second
+
+                tagsChipGroup.addView(chip)
             }
-
-            val chipDrawable = ChipDrawable.createFromAttributes(requireContext(), null, 0,
-                R.style.Widget_MaterialComponents_Chip_Filter)
-            chip.setChipDrawable(chipDrawable)
-            chip.isCheckable = false
-
-            tagsChipGroup.addView(chip)
-        }
+        })
 
         gradeTextView.text = day.grade.grade.toString()
 
@@ -81,6 +85,13 @@ class EditDayFragment : Fragment() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
 
-        editDayViewModel.saveDescription(descriptionEditText.text.toString())
+        saveStateInViewModel()
+    }
+
+    private fun saveStateInViewModel() {
+        editDayViewModel.apply {
+            saveDescription(descriptionEditText.text.toString())
+            saveCheckedTags(tagsChipGroup.findCheckedChipTexts())
+        }
     }
 }
