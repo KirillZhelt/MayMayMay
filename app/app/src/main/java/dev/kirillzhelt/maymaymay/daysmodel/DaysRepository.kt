@@ -30,6 +30,23 @@ class DaysRepository(private val dayDao: DayDao, private val tagDao: TagDao,
         }
     }
 
+    suspend fun updateDay(day: Day) {
+        val dayId = dayDao.getDayId(day.date)
+
+        if (dayId != null) {
+            val dayEntity = DayEntity(day.date, day.description, day.grade, dayId)
+
+            dayDao.update(dayEntity)
+
+            if (day.tags.isNotEmpty()) {
+                dayTagJoinDao.deleteTagsForDayByDayId(dayId)
+
+                val dayTagJoins = tagDao.getTagIds(day.tags).map { tagId -> DayTagJoin(dayId, tagId) }
+                dayTagJoinDao.insert(dayTagJoins)
+            }
+        }
+    }
+
     suspend fun deleteDay(day: Day) {
         dayDao.deleteByDate(day.date)
     }

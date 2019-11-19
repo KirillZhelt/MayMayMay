@@ -34,6 +34,9 @@
         <action
             android:id="@+id/action_editDayFragment_to_dayInfoFragment"
             app:destination="@id/dayInfoFragment" />
+        <argument
+            android:name="day"
+            app:argType="dev.kirillzhelt.maymaymay.daysmodel.Day" />
     </fragment>
     <fragment
         android:id="@+id/dayInfoFragment"

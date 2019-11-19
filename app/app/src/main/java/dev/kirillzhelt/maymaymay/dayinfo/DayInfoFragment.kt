@@ -2,12 +2,11 @@ package dev.kirillzhelt.maymaymay.dayinfo
 
 import androidx.lifecycle.Observer
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipDrawable
@@ -52,7 +51,35 @@ class DayInfoFragment : Fragment() {
             bind(day)
         })
 
+        dayInfoViewModel.navigateEditDay.observe(this, Observer { day ->
+            if (day != null) {
+                findNavController().navigate(DayInfoFragmentDirections.actionDayInfoFragmentToEditDayFragment(day))
+                dayInfoViewModel.onNavigateEditDayComplete()
+            }
+        })
+
+        setHasOptionsMenu(true)
+
         return inflatedView
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+
+        inflater.inflate(R.menu.menu_day_info, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menu_day_info_navigate_edit_day -> {
+                dayInfoViewModel.onNavigateEditDay()
+                true
+            }
+
+            else -> {
+                super.onOptionsItemSelected(item)
+            }
+        }
     }
 
     private fun bind(day: Day) {
