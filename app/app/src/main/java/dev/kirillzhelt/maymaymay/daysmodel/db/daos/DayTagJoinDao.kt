@@ -50,4 +50,11 @@ interface DayTagJoinDao {
 
     @Delete
     suspend fun delete(dayTagJoin: DayTagJoin)
+
+    @Query("""
+        DELETE
+        FROM day_tag_join
+        WHERE day_tag_join.day_id = :dayId
+    """)
+    suspend fun deleteTagsForDayByDayId(dayId: Int)
 }

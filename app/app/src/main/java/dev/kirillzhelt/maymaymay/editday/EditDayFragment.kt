@@ -11,12 +11,14 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipDrawable
 import com.google.android.material.chip.ChipGroup
 import dev.kirillzhelt.maymaymay.MainApplication
 import dev.kirillzhelt.maymaymay.R
+import dev.kirillzhelt.maymaymay.newday.NewDayFragmentDirections
 import dev.kirillzhelt.maymaymay.utils.findCheckedChipTexts
 import java.text.SimpleDateFormat
 import java.util.*
@@ -78,6 +80,24 @@ class EditDayFragment : Fragment() {
         editDayViewModel.description.observe(this, Observer { description ->
             descriptionEditText.setText(description)
         })
+
+        saveDayButton.setOnClickListener {
+            if (descriptionEditText.text.isEmpty()) {
+                descriptionEditText.error = getString(R.string.description_empty_error)
+            } else {
+                descriptionEditText.error = null
+
+                saveStateInViewModel()
+
+                editDayViewModel.updateDay()
+
+                findNavController().navigateUp()
+            }
+
+            saveStateInViewModel()
+
+            editDayViewModel.updateDay()
+        }
 
         return inflatedView
     }

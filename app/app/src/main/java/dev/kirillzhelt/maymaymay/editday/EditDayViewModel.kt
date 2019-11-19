@@ -1,22 +1,19 @@
 package dev.kirillzhelt.maymaymay.editday
 
-import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import dev.kirillzhelt.maymaymay.daysmodel.Day
 import dev.kirillzhelt.maymaymay.daysmodel.DaysRepository
-import java.util.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-class EditDayViewModel(private val day: Day, private val daysRepository: DaysRepository): ViewModel() {
+class EditDayViewModel(private val dayToEdit: Day, private val daysRepository: DaysRepository): ViewModel() {
 
     private val _description = MutableLiveData<String>()
 
     val description: LiveData<String> = _description
 
     private val _tags: LiveData<List<String>> = daysRepository.getAllTags()
-    private val _checkedTags = MutableLiveData<List<String>>(day.tags)
+    private val _checkedTags = MutableLiveData<List<String>>(dayToEdit.tags)
 
     val tags = MediatorLiveData<List<Pair<String, Boolean>>>()
 
@@ -42,4 +39,11 @@ class EditDayViewModel(private val day: Day, private val daysRepository: DaysRep
         _checkedTags.value = tags
     }
 
+    fun updateDay() {
+        val day = Day(dayToEdit.date, _description.value!!, dayToEdit.grade, _checkedTags.value!!)
+
+        viewModelScope.launch(Dispatchers.IO) {
+            daysRepository.updateDay(day)
+        }
+    }
 }
