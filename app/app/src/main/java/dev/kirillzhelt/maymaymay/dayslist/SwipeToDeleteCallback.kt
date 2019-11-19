@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import dev.kirillzhelt.maymaymay.daysmodel.Day
+import kotlin.math.absoluteValue
 
 class SwipeToDeleteCallback(private val icon: Drawable,
                             private val onSwipedListener: (Day) -> Unit):
@@ -27,20 +28,23 @@ class SwipeToDeleteCallback(private val icon: Drawable,
 
         val itemView = viewHolder.itemView
 
+        val iconMargin = (itemView.height - icon.intrinsicHeight) / 2
+        val iconTop = itemView.top + (itemView.height - icon.intrinsicHeight) / 2
+        val iconBottom = iconTop + icon.intrinsicHeight
+
+        val iconLeft = itemView.right - iconMargin - icon.intrinsicWidth
+        val iconRight = itemView.right - iconMargin
+
         if (dX < 0) {
             background.setBounds(itemView.right + dX.toInt() - BACKGROUND_CORNER_OFFSET, itemView.top, itemView.right,
                 itemView.bottom)
 
-            val iconMargin = (itemView.height - icon.intrinsicHeight) / 2
-            val iconTop = itemView.top + (itemView.height - icon.intrinsicHeight) / 2
-            val iconBottom = iconTop + icon.intrinsicHeight
-
-            val iconLeft = itemView.right - iconMargin - icon.intrinsicWidth
-            val iconRight = itemView.right - iconMargin
-
             icon.setBounds(iconLeft, iconTop, iconRight, iconBottom)
         } else {
             background.setBounds(0, 0, 0, 0)
+        }
+
+        if (dX.absoluteValue < itemView.width - iconLeft) {
             icon.setBounds(0, 0, 0, 0)
         }
 
