@@ -2,6 +2,7 @@ package dev.kirillzhelt.maymaymay.editday
 
 
 import android.os.Bundle
+import androidx.lifecycle.Observer
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -31,6 +32,8 @@ class EditDayFragment : Fragment() {
         EditDayViewModelFactory(args.day.date, MainApplication.daysRepository)
     }
 
+    private lateinit var descriptionEditText: EditText
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -39,10 +42,11 @@ class EditDayFragment : Fragment() {
         val inflatedView = inflater.inflate(R.layout.fragment_edit_day, container, false)
 
         val dateTextView: TextView = inflatedView.findViewById(R.id.fragment_edit_day_date_tv)
-        val descriptionEditText: EditText = inflatedView.findViewById(R.id.fragment_edit_day_description_et)
         val tagsChipGroup: ChipGroup = inflatedView.findViewById(R.id.fragment_edit_day_tags_cg)
         val gradeTextView: TextView = inflatedView.findViewById(R.id.fragment_edit_day_grade_title_tv)
         val saveDayButton: Button = inflatedView.findViewById(R.id.fragment_edit_day_save_day_btn)
+
+        descriptionEditText = inflatedView.findViewById(R.id.fragment_edit_day_description_et)
 
         val day = args.day
 
@@ -67,6 +71,16 @@ class EditDayFragment : Fragment() {
 
         gradeTextView.text = day.grade.grade.toString()
 
+        editDayViewModel.description.observe(this, Observer { description ->
+            descriptionEditText.setText(description)
+        })
+
         return inflatedView
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        editDayViewModel.saveDescription(descriptionEditText.text.toString())
     }
 }
