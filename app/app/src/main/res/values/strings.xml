@@ -20,4 +20,5 @@
     <string name="description_title">You did</string>
     <string name="grade_title">Estimated as</string>
     <string name="date_not_chosen">Date not chosen</string>
+    <string name="edit_day">Edit day</string>
 </resources>
