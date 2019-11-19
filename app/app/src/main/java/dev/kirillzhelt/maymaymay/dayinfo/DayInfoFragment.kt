@@ -51,6 +51,13 @@ class DayInfoFragment : Fragment() {
             bind(day)
         })
 
+        dayInfoViewModel.navigateEditDay.observe(this, Observer { day ->
+            if (day != null) {
+                findNavController().navigate(DayInfoFragmentDirections.actionDayInfoFragmentToEditDayFragment(day))
+                dayInfoViewModel.onNavigateEditDayComplete()
+            }
+        })
+
         setHasOptionsMenu(true)
 
         return inflatedView
@@ -65,7 +72,7 @@ class DayInfoFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_day_info_navigate_edit_day -> {
-                findNavController().navigate(DayInfoFragmentDirections.actionDayInfoFragmentToEditDayFragment())
+                dayInfoViewModel.onNavigateEditDay()
                 true
             }
 
