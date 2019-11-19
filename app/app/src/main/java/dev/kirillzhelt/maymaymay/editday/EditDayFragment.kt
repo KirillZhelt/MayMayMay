@@ -6,12 +6,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
+import dev.kirillzhelt.maymaymay.MainApplication
 import dev.kirillzhelt.maymaymay.R
 
 /**
  * A simple [Fragment] subclass.
  */
 class EditDayFragment : Fragment() {
+
+    private val editDayViewModel: EditDayViewModel by viewModels { EditDayViewModelFactory(MainApplication.daysRepository) }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
