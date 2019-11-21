@@ -23,4 +23,5 @@
     <string name="edit_day">Edit day</string>
     <string name="save_day">Save</string>
     <string name="smile_button">Smile</string>
+    <string name="capture_button">Capture</string>
 </resources>
