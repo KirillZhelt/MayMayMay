@@ -107,7 +107,9 @@ class SmileDetectionFragment : Fragment() {
             .build()
 
         val analyzer = ImageAnalysis(analyzerConfig).apply {
-            analyzer = SmileImageAnalyzer()
+            analyzer = SmileImageAnalyzer {
+                resultTextView.text = it.toString()
+            }
         }
 
         CameraX.bindToLifecycle(this, preview, analyzer)
