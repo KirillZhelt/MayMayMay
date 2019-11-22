@@ -52,6 +52,9 @@ class NewDayViewModel(private val daysRepository: DaysRepository): ViewModel() {
         }
     }
 
+    private val _navigateSmileDetection = MutableLiveData<Boolean>(false)
+    val navigateSmileDetection: LiveData<Boolean> = _navigateSmileDetection
+
     init {
         val gradeValues = DayGrade.values().map { dayGrade -> dayGrade.grade }
 
@@ -116,5 +119,17 @@ class NewDayViewModel(private val daysRepository: DaysRepository): ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             daysRepository.addNewDay(day)
         }
+    }
+
+    fun onNavigateSmileDetection() {
+        _navigateSmileDetection.value = true
+    }
+
+    fun onNavigateSmileDetectionComplete() {
+        _navigateSmileDetection.value = false
+    }
+
+    fun onSmileDetected(value: Int) {
+        onGradePicked(value)
     }
 }

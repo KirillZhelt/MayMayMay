@@ -2,6 +2,7 @@ package dev.kirillzhelt.maymaymay.newday
 
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -27,7 +28,8 @@ import java.util.*
  */
 class NewDayFragment: Fragment() {
 
-    private val newDayViewModel: NewDayViewModel by viewModels { NewDayViewModelFactory(MainApplication.daysRepository) }
+    private val newDayViewModel: NewDayViewModel
+            by viewModels({ requireActivity() }) { NewDayViewModelFactory(MainApplication.daysRepository) }
 
     private lateinit var tagsChipGroup: ChipGroup
     private lateinit var descriptionEditText: EditText
@@ -95,9 +97,6 @@ class NewDayFragment: Fragment() {
         })
 
         addDayButton.setOnClickListener { view ->
-            // TODO: do not allow to add days with
-            //  the same date as already exists (check edittext text, and
-            //  block some dates in calendar)
             if (descriptionEditText.text.isEmpty()) {
                 descriptionEditText.error = getString(R.string.description_empty_error)
             } else {
@@ -127,6 +126,20 @@ class NewDayFragment: Fragment() {
         datePickerDialog.setCancelColor(Color.WHITE)
 
         datePickerDialog.maxDate = Calendar.getInstance()
+
+        inflatedView.findViewById<Button>(R.id.fragment_new_day_navigate_smile_fragment_btn).setOnClickListener {
+            newDayViewModel.onNavigateSmileDetection()
+        }
+
+        newDayViewModel.navigateSmileDetection.observe(this, Observer { navigate ->
+            if (navigate) {
+                saveStateInViewModel()
+
+                findNavController().navigate(NewDayFragmentDirections.actionNewDayFragmentToSmileDetectionFragment())
+
+                newDayViewModel.onNavigateSmileDetectionComplete()
+            }
+        })
 
         newDayViewModel.dates.observe(this, Observer { dates ->
             datePickerDialog.disabledDays = dates.toTypedArray()

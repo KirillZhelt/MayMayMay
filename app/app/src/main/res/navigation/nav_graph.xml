@@ -25,6 +25,9 @@
         <action
             android:id="@+id/action_newDayFragment_to_daysListFragment"
             app:destination="@id/daysListFragment" />
+        <action
+            android:id="@+id/action_newDayFragment_to_smileDetectionFragment"
+            app:destination="@id/smileDetectionFragment" />
     </fragment>
     <fragment
         android:id="@+id/editDayFragment"
@@ -52,5 +55,14 @@
         <argument
             android:name="day"
             app:argType="dev.kirillzhelt.maymaymay.daysmodel.Day" />
+    </fragment>
+    <fragment
+        android:id="@+id/smileDetectionFragment"
+        android:name="dev.kirillzhelt.maymaymay.newday.smiledetection.SmileDetectionFragment"
+        android:label="Smile"
+        tools:layout="@layout/fragment_smile_detection">
+        <action
+            android:id="@+id/action_smileDetectionFragment_to_newDayFragment"
+            app:destination="@id/newDayFragment" />
     </fragment>
 </navigation>
