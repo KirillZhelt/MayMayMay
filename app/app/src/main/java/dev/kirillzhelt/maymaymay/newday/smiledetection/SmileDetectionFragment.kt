@@ -10,13 +10,19 @@ import android.util.DisplayMetrics
 import android.util.Rational
 import android.util.Size
 import android.view.*
+import android.widget.Button
 import androidx.fragment.app.Fragment
 import android.widget.TextView
 import android.widget.Toast
 import androidx.camera.core.*
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import dev.kirillzhelt.maymaymay.MainApplication
 
 import dev.kirillzhelt.maymaymay.R
+import dev.kirillzhelt.maymaymay.newday.NewDayViewModel
+import dev.kirillzhelt.maymaymay.newday.NewDayViewModelFactory
 import kotlinx.coroutines.newSingleThreadContext
 import java.util.concurrent.Executors
 
@@ -27,6 +33,9 @@ private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
  * A simple [Fragment] subclass.
  */
 class SmileDetectionFragment : Fragment() {
+
+    private val newDayViewModel: NewDayViewModel
+            by viewModels({ requireActivity() }) { NewDayViewModelFactory(MainApplication.daysRepository) }
 
     private lateinit var viewFinder: TextureView
 
@@ -47,6 +56,12 @@ class SmileDetectionFragment : Fragment() {
             viewFinder.post { startCamera() }
         } else {
             requestPermissions(REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS)
+        }
+
+        inflatedView.findViewById<Button>(R.id.fragment_smile_detection_capture_btn).setOnClickListener {
+            newDayViewModel.onSmileDetected(resultTextView.text.toString().toInt())
+
+            findNavController().navigate(SmileDetectionFragmentDirections.actionSmileDetectionFragmentToNewDayFragment())
         }
 
         return inflatedView

@@ -28,7 +28,8 @@ import java.util.*
  */
 class NewDayFragment: Fragment() {
 
-    private val newDayViewModel: NewDayViewModel by viewModels { NewDayViewModelFactory(MainApplication.daysRepository) }
+    private val newDayViewModel: NewDayViewModel
+            by viewModels({ requireActivity() }) { NewDayViewModelFactory(MainApplication.daysRepository) }
 
     private lateinit var tagsChipGroup: ChipGroup
     private lateinit var descriptionEditText: EditText

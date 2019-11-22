@@ -128,4 +128,8 @@ class NewDayViewModel(private val daysRepository: DaysRepository): ViewModel() {
     fun onNavigateSmileDetectionComplete() {
         _navigateSmileDetection.value = false
     }
+
+    fun onSmileDetected(value: Int) {
+        onGradePicked(value)
+    }
 }
