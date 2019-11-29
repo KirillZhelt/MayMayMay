@@ -120,6 +120,11 @@ class NewDayFragment: Fragment() {
         }
 
         datePickerDialog.isThemeDark = false
+
+        datePickerDialog.locale = Locale.US
+        datePickerDialog.setCancelText("Cancel")
+        datePickerDialog.setOkText("Ok")
+
         datePickerDialog.showYearPickerFirst(false)
         datePickerDialog.setTitle(getString(R.string.date_picker_title))
         datePickerDialog.setOkColor(Color.WHITE)
