@@ -106,6 +106,7 @@ class NewDayFragment: Fragment() {
 
                 newDayViewModel.addNewDay()
 
+                newDayViewModel.clearState()
                 findNavController().navigate(NewDayFragmentDirections.actionNewDayFragmentToDaysListFragment())
             }
         }

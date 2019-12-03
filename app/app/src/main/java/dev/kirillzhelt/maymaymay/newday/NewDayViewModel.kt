@@ -132,4 +132,11 @@ class NewDayViewModel(private val daysRepository: DaysRepository): ViewModel() {
     fun onSmileDetected(value: Int) {
         onGradePicked(value)
     }
+
+    fun clearState() {
+        _pickedDate.value = null
+        _description.value = ""
+        _pickedGrade.value = maxGradeValue.value
+        _checkedTags.value = emptyList()
+    }
 }
