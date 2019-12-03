@@ -63,6 +63,7 @@
         tools:layout="@layout/fragment_smile_detection">
         <action
             android:id="@+id/action_smileDetectionFragment_to_newDayFragment"
-            app:destination="@id/newDayFragment" />
+            app:destination="@id/newDayFragment"
+            app:popUpTo="@+id/daysListFragment" />
     </fragment>
 </navigation>
